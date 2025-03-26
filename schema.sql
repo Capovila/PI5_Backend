@@ -27,7 +27,7 @@
     CREATE TABLE Alunos (
         ra_aluno INT NOT NULL PRIMARY KEY,
         nome text not null,
-        mediumint not null,  
+        id_turma mediumint not null,  
         CONSTRAINT fk_id_turma FOREIGN KEY (id_turma) REFERENCES Turmas(id_turma)
     );
 

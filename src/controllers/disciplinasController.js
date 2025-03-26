@@ -1,6 +1,7 @@
 import * as disciplinasModel from "../models/disciplinasModel.js";
 
-export async function getAlunos(req, res) {
+//GET
+export async function getDisciplinas(req, res) {
   try {
     const response = await disciplinasModel.getDisciplinas();
     res.status(200).json(response);
@@ -10,7 +11,7 @@ export async function getAlunos(req, res) {
   }
 }
 
-export async function getAlunosBySemestre(req, res) {
+export async function getDisciplinasBySemestre(req, res) {
   try {
     const { semestre } = req.params;
     const response = await disciplinasModel.getDisciplinasBySemestre(semestre);
@@ -26,7 +27,7 @@ export async function getAlunosBySemestre(req, res) {
   }
 }
 
-export async function getAlunosByArea(req, res) {
+export async function getDisciplinasByArea(req, res) {
   try {
     const { area_relacionada } = req.body;
     const response = await disciplinasModel.getDisciplinasByArea(
@@ -44,7 +45,7 @@ export async function getAlunosByArea(req, res) {
   }
 }
 
-export async function getAlunosById(req, res) {
+export async function getDisciplinasById(req, res) {
   try {
     const { id } = req.params;
     const response = await disciplinasModel.getDisciplinasById(id);
@@ -57,5 +58,40 @@ export async function getAlunosById(req, res) {
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Erro ao puxar registro" });
+  }
+}
+
+export async function getDisciplinasByProfessorRa(req, res) {
+  try {
+    const { ra } = req.params;
+    const response = await disciplinasModel.getDisciplinasByProfessorRa(ra);
+
+    if (response.length == 0) {
+      return res.status(404).json({ error: "Registro nao encontrado" });
+    }
+
+    res.status(200).json(response);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Erro ao puxar registro" });
+  }
+}
+
+//POST
+export async function addDisciplina(req, res) {
+  try {
+    const { nome, descricao, semestre, area_relacionada, ra_professor } =
+      req.body;
+    const response = await disciplinasModel.addDisciplina(
+      nome,
+      descricao,
+      semestre,
+      area_relacionada,
+      ra_professor
+    );
+    res.status(200).json(response);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Erro ao puxar os dados" });
   }
 }

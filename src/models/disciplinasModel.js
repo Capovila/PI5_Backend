@@ -1,5 +1,6 @@
 import { pool } from "../config/config.js";
 
+//GET
 export async function getDisciplinas() {
   const [rows] = await pool.query(`SELECT * FROM Disciplinas`);
   return rows;
@@ -27,4 +28,27 @@ export async function getDisciplinasByArea(area) {
     [area]
   );
   return rows;
+}
+
+export async function getDisciplinasByProfessorRa(ra) {
+  const [rows] = await pool.query(
+    `SELECT * FROM Disciplinas WHERE ra_professor = ?`,
+    [ra]
+  );
+  return rows;
+}
+
+//POST
+export async function addDisciplina(
+  nome,
+  descricao,
+  semestre,
+  area_relacionada,
+  ra_professor
+) {
+  const response = await pool.query(
+    `INSERT INTO Disciplinas (nome, descricao, semestre, area_relacionada, ra_professor) VALUES (?,?,?,?,?)`,
+    [nome, descricao, semestre, area_relacionada, ra_professor]
+  );
+  return response;
 }

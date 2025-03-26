@@ -1,5 +1,6 @@
 import { pool } from "../config/config.js";
 
+//GET
 export async function getNotas() {
   const [rows] = await pool.query(`SELECT * FROM Notas`);
   return rows;
@@ -28,3 +29,5 @@ export async function getNotasByAlunoId(id) {
   ]);
   return rows;
 }
+
+//POST

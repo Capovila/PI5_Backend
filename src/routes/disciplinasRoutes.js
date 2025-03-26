@@ -3,9 +3,15 @@ import * as disciplinasController from "../controllers/disciplinasController.js"
 
 const router = express.Router();
 
-router.get("/", disciplinasController.getAlunos);
-router.get("/area", disciplinasController.getAlunosByArea);
-router.get("/semestre/:semestre", disciplinasController.getAlunosBySemestre);
-router.get("/:id", disciplinasController.getAlunosById);
+router.get("/", disciplinasController.getDisciplinas);
+router.get("/area", disciplinasController.getDisciplinasByArea);
+router.get(
+  "/semestre/:semestre",
+  disciplinasController.getDisciplinasBySemestre
+);
+router.get("/:id", disciplinasController.getDisciplinasById);
+router.get("/professor/:ra", disciplinasController.getDisciplinasByProfessorRa);
+
+router.post("/adicionar", disciplinasController.addDisciplina);
 
 export default router;
