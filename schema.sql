@@ -27,7 +27,7 @@
     CREATE TABLE Alunos (
         ra_aluno INT NOT NULL PRIMARY KEY,
         nome text not null,
-        id_turma mediumint not null,  
+        mediumint not null,  
         CONSTRAINT fk_id_turma FOREIGN KEY (id_turma) REFERENCES Turmas(id_turma)
     );
 
@@ -47,7 +47,8 @@
         CONSTRAINT fk_id_turma_disciplina FOREIGN KEY (id_turma) REFERENCES Turmas(id_turma),
         id_disciplina mediumint not null,
         constraint fk_id_disciplina_turma foreign key (id_disciplina) references Disciplinas(id_disciplina),
-        taxa_aprovacao float not null
+        isConcluida boolean not null,
+        taxa_aprovacao float
     );
 
     --############################################################################################################################
@@ -96,10 +97,10 @@ INSERT INTO Notas (ra_aluno, id_disciplina, nota) VALUES
 (2023005, 5, 7.5);  -- Mariana Santos, Química
 
 -- Inserindo Turma_Disciplina
-INSERT INTO Turma_Disciplina (id_turma, id_disciplina, taxa_aprovacao) VALUES
-(1, 1, 85.5),  -- Turma 1, Matemática
-(2, 2, 75.0),  -- Turma 2, História
-(3, 3, 90.2),  -- Turma 3, Programação
-(4, 4, 80.0),  -- Turma 4, Física
-(5, 5, 88.4);  -- Turma 5, Química
+INSERT INTO Turma_Disciplina (id_turma, id_disciplina, taxa_aprovacao, isConcluida) VALUES
+(1, 1, 85.5, false),  -- Turma 1, Matemática
+(2, 2, 75.0, false),  -- Turma 2, História
+(3, 3, 90.2, false),  -- Turma 3, Programação
+(4, 4, 80.0, false),  -- Turma 4, Física
+(5, 5, 88.4, false);  -- Turma 5, Química
 

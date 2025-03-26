@@ -4,6 +4,8 @@ import * as disciplinasController from "../controllers/disciplinasController.js"
 const router = express.Router();
 
 router.get("/", disciplinasController.getAlunos);
+router.get("/area", disciplinasController.getAlunosByArea);
+router.get("/semestre/:semestre", disciplinasController.getAlunosBySemestre);
 router.get("/:id", disciplinasController.getAlunosById);
 
 export default router;

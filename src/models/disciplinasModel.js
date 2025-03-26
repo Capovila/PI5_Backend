@@ -12,3 +12,19 @@ export async function getDisciplinasById(id) {
   );
   return rows;
 }
+
+export async function getDisciplinasBySemestre(semestre) {
+  const [rows] = await pool.query(
+    `SELECT * FROM Disciplinas WHERE semestre = ?`,
+    [semestre]
+  );
+  return rows;
+}
+
+export async function getDisciplinasByArea(area) {
+  const [rows] = await pool.query(
+    `SELECT * FROM Disciplinas WHERE area_relacionada = ?`,
+    [area]
+  );
+  return rows;
+}

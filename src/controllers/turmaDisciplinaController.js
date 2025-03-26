@@ -15,7 +15,7 @@ export async function getTurmasDisciplinaById(req, res) {
     const { id } = req.params;
     const response = await turmaDisciplinaModel.getTurmasDisciplinaById(id);
 
-    if (!response) {
+    if (response.length == 0) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
@@ -31,7 +31,7 @@ export async function getTurmasByDisciplinaId(req, res) {
     const { id } = req.params;
     const response = await turmaDisciplinaModel.getTurmasByDisciplinaId(id);
 
-    if (!response) {
+    if (response.length == 0) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
@@ -47,7 +47,7 @@ export async function getDisciplinaByTurmaId(req, res) {
     const { id } = req.params;
     const response = await turmaDisciplinaModel.getDisciplinaByTurmaId(id);
 
-    if (!response) {
+    if (response.length == 0) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
 

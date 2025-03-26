@@ -15,7 +15,7 @@ export async function getAlunosById(req, res) {
     const { id } = req.params;
     const response = await alunosModel.getAlunosById(id);
 
-    if (!response) {
+    if (response.length == 0) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
 

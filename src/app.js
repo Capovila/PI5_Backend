@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use(" /turmas", turmasRoutes);
+app.use("/turmas", turmasRoutes);
 app.use("/alunos", alunosRoutes);
 app.use("/disciplinas", disciplinasRoutes);
 app.use("/notas", notasRoutes);

@@ -11,3 +11,11 @@ export async function getTurmaById(id) {
   ]);
   return rows[0];
 }
+
+export async function getTurmaByDate(date) {
+  const [rows] = await pool.query(
+    `SELECT * FROM Turmas WHERE data_inicio = ?`,
+    [date]
+  );
+  return rows;
+}

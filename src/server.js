@@ -5,6 +5,10 @@ app.use((err, req, res, next) => {
   res.status(500).send("Somehting broke");
 });
 
+app.get("/", (req, res) => {
+  return res.status(200).send("Server Working");
+});
+
 app.listen(8080, () => {
   console.log("Server running at 8080");
 });
