@@ -5,10 +5,12 @@ const router = express.Router();
 
 router.get("/", turmaDisciplinaController.getTurmaDisciplina);
 router.get("/:id", turmaDisciplinaController.getDisciplinaByTurmaId);
-router.get("/turmas/:id", turmaDisciplinaController.getDisciplinaByTurmaId);
+router.get("/turma/:id", turmaDisciplinaController.getDisciplinaByTurmaId);
 router.get(
-  "/disciplinas/:id",
+  "/disciplina/:id",
   turmaDisciplinaController.getTurmasByDisciplinaId
 );
+
+router.post("/adicionar", turmaDisciplinaController.addTurmaDisciplina);
 
 export default router;

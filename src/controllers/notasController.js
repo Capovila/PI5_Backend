@@ -1,5 +1,6 @@
 import * as notasModel from "../models/notasModel.js";
 
+//GET
 export async function getNotas(req, res) {
   try {
     const response = await notasModel.getNotas();
@@ -55,5 +56,17 @@ export async function getNotasByAlunoId(req, res) {
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Erro ao puxar registro" });
+  }
+}
+
+//POST
+export async function addNotas(req, res) {
+  try {
+    const { ra_aluno, id_disciplina, nota } = req.body;
+    const response = await notasModel.addNotas(ra_aluno, id_disciplina, nota);
+    res.status(200).json(response);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Erro ao puxar os dados " });
   }
 }

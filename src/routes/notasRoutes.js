@@ -8,4 +8,6 @@ router.get("/:id", notasController.getNotasById);
 router.get("/aluno/:id", notasController.getNotasByAlunoId);
 router.get("/disciplina/:id", notasController.getNotasByDisciplinaId);
 
+router.post("/adicionar", notasController.addNotas);
+
 export default router;

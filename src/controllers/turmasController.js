@@ -1,5 +1,6 @@
 import * as turmasModel from "../models/turmasModel.js";
 
+//GET
 export async function getTurmas(req, res) {
   try {
     const response = await turmasModel.getTurmas();
@@ -36,5 +37,16 @@ export async function getTurmasById(req, res) {
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ error: "Erro ao puxar registro" });
+  }
+}
+
+//POST
+export async function addTurmas(req, res) {
+  try {
+    const { data_inicio, isGraduated } = req.body;
+    const response = await turmasModel.addTurmas(data_inicio, isGraduated);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao puxar os dados" });
   }
 }

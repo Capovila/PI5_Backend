@@ -1,5 +1,6 @@
 import { pool } from "../config/config.js";
 
+//GET
 export async function getTurmaDisciplina() {
   const [rows] = await pool.query(`SELECT * FROM Turma_Disciplina`);
   return rows;
@@ -29,4 +30,19 @@ export async function getDisciplinaByTurmaId(id) {
     [id]
   );
   return rows;
+}
+
+//POST
+export async function addTurmaDisciplina(
+  id_turma,
+  id_disciplina,
+  taxa_aprovacao,
+  isConcluida
+) {
+  const response = await pool.query(
+    `INSERT INTO Turma_Disciplina (id_turma, id_disciplina, taxa_aprovacao, isConcluida) VALUES (?,?,?,?)`,
+    [id_turma, id_disciplina, taxa_aprovacao, isConcluida]
+  );
+
+  return response;
 }

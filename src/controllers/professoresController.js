@@ -1,5 +1,6 @@
 import * as professoresModel from "../models/professoresModel.js";
 
+//GET
 export async function getProfessores(req, res) {
   try {
     const response = await professoresModel.getProfessores();
@@ -23,5 +24,25 @@ export async function getProfessoresById(req, res) {
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Erro ao puxar registro" });
+  }
+}
+
+//POST
+export async function addProfessores(req, res) {
+  try {
+    const { ra_professor, nome, email, senha, is_admin, is_liberado } =
+      req.body;
+    const response = await professoresModel.addProfessores(
+      ra_professor,
+      nome,
+      email,
+      senha,
+      is_admin,
+      is_liberado
+    );
+    res.status(200).json(response);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Erro ao puxar os dados " });
   }
 }

@@ -1,5 +1,6 @@
 import { pool } from "../config/config.js";
 
+//GET
 export async function getTurmas() {
   const [rows] = await pool.query(`SELECT * FROM Turmas`);
   return rows;
@@ -18,4 +19,13 @@ export async function getTurmaByDate(date) {
     [date]
   );
   return rows;
+}
+
+//POST
+export async function addTurmas(data_inicio, isGraduated) {
+  const response = await pool.query(
+    `INSERT INTO Turmas (data_inicio, isGraduated) VALUES (?,?)`,
+    [data_inicio, isGraduated]
+  );
+  return response;
 }

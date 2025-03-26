@@ -92,6 +92,6 @@ export async function addDisciplina(req, res) {
     res.status(200).json(response);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Erro ao puxar os dados" });
+    res.status(500).json({ error: "Erro ao adicionar registro" });
   }
 }

@@ -7,4 +7,6 @@ router.get("/", turmasController.getTurmas);
 router.get("/data", turmasController.getTurmasByDate);
 router.get("/:id", turmasController.getTurmasById);
 
+router.post("/adicionar", turmasController.addTurmas);
+
 export default router;

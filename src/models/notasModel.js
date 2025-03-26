@@ -31,3 +31,11 @@ export async function getNotasByAlunoId(id) {
 }
 
 //POST
+export async function addNotas(ra_aluno, id_disciplina, nota) {
+  const response = await pool.query(
+    `INSERT INTO Notas (ra_aluno, id_disciplina, nota) VALUES (?, ?, ?)`,
+    [ra_aluno, id_disciplina, nota]
+  );
+
+  return response;
+}

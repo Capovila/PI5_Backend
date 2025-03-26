@@ -1,5 +1,6 @@
 import * as turmaDisciplinaModel from "../models/turmaDisciplinaModel.js";
 
+//GET
 export async function getTurmaDisciplina(req, res) {
   try {
     const response = await turmaDisciplinaModel.getTurmaDisciplina();
@@ -55,5 +56,22 @@ export async function getDisciplinaByTurmaId(req, res) {
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Erro ao puxar registro" });
+  }
+}
+
+//POST
+export async function addTurmaDisciplina(req, res) {
+  try {
+    const { id_turma, id_disciplina, taxa_aprovacao, isConcluida } = req.body;
+    const response = await turmaDisciplinaModel.addTurmaDisciplina(
+      id_turma,
+      id_disciplina,
+      taxa_aprovacao,
+      isConcluida
+    );
+    res.status(200).json(response);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Erro ao puxar os dados " });
   }
 }
