@@ -29,3 +29,11 @@ export async function addTurmas(data_inicio, isGraduated) {
   );
   return response;
 }
+
+//DELETE
+export async function deleteTurma(id) {
+  const [rows] = await pool.query(`DELETE FROM Turmas WHERE id_turma = ?`, [
+    id,
+  ]);
+  return rows;
+}

@@ -17,9 +17,7 @@ export async function getTurmasDisciplinaById(req, res) {
     const response = await turmaDisciplinaModel.getTurmasDisciplinaById(id);
 
     if (response.length == 0) {
-      return res
-        .status(404)
-        .json({ mensage: err, error: "Registro nao encontrado" });
+      return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);
@@ -35,9 +33,7 @@ export async function getTurmasByDisciplinaId(req, res) {
     const response = await turmaDisciplinaModel.getTurmasByDisciplinaId(id);
 
     if (response.length == 0) {
-      return res
-        .status(404)
-        .json({ mensage: err, error: "Registro nao encontrado" });
+      return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);
@@ -53,9 +49,7 @@ export async function getDisciplinaByTurmaId(req, res) {
     const response = await turmaDisciplinaModel.getDisciplinaByTurmaId(id);
 
     if (response.length == 0) {
-      return res
-        .status(404)
-        .json({ mensage: err, error: "Registro nao encontrado" });
+      return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);
@@ -89,9 +83,7 @@ export async function deleteTurmaDisciplina(req, res) {
     const response = await turmaDisciplinaModel.deleteTurmaDisciplina(id);
 
     if (response.length == 0) {
-      return res
-        .status(404)
-        .json({ mensage: err, error: "Registro nao encontrado" });
+      return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);

@@ -17,9 +17,7 @@ export async function getProfessoresById(req, res) {
     const response = await professoresModel.getProfessoresById(id);
 
     if (response.length == 0) {
-      return res
-        .status(404)
-        .json({ mensage: err, error: "Registro nao encontrado" });
+      return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);
@@ -56,9 +54,7 @@ export async function deleteProfessor(req, res) {
     const response = await professoresModel.deleteProfessor(id);
 
     if (response.length == 0) {
-      return res
-        .status(404)
-        .json({ mensage: err, error: "Registro nao encontrado" });
+      return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);

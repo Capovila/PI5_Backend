@@ -17,9 +17,7 @@ export async function getNotasById(req, res) {
     const response = await notasModel.getNotasById(id);
 
     if (response.length == 0) {
-      return res
-        .status(404)
-        .json({ mensage: err, error: "Registro nao encontrado" });
+      return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);
@@ -35,9 +33,7 @@ export async function getNotasByDisciplinaId(req, res) {
     const response = await notasModel.getNotasByDisciplinaId(id);
 
     if (response.length == 0) {
-      return res
-        .status(404)
-        .json({ mensage: err, error: "Registro nao encontrado" });
+      return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);
@@ -53,9 +49,7 @@ export async function getNotasByAlunoId(req, res) {
     const response = await notasModel.getNotasByAlunoId(id);
 
     if (response.length == 0) {
-      return res
-        .status(404)
-        .json({ mensage: err, error: "Registro nao encontrado" });
+      return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);
@@ -84,9 +78,7 @@ export async function deleteNotas(req, res) {
     const response = await notasModel.deleteNotas(id);
 
     if (response.length == 0) {
-      return res
-        .status(404)
-        .json({ mensage: err, error: "Registro nao encontrado" });
+      return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);

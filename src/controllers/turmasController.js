@@ -5,7 +5,7 @@ export async function getTurmas(req, res) {
   try {
     const response = await turmasModel.getTurmas();
     res.status(200).json(response);
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({ mensage: err, error: "Erro ao puxar os dados" });
   }
 }
@@ -16,13 +16,11 @@ export async function getTurmasByDate(req, res) {
     const response = await turmasModel.getTurmaByDate(data_inicio);
 
     if (response.length == 0) {
-      return res
-        .status(404)
-        .json({ mensage: err, error: "Registro nao encontrado" });
+      return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({ mensage: err, error: "Erro ao puxar registro" });
   }
 }
@@ -33,13 +31,11 @@ export async function getTurmasById(req, res) {
     const response = await turmasModel.getTurmaById(id);
 
     if (response.length == 0) {
-      return res
-        .status(404)
-        .json({ mensage: err, error: "Registro nao encontrado" });
+      return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({ mensage: err, error: "Erro ao puxar registro" });
   }
 }
@@ -50,7 +46,23 @@ export async function addTurmas(req, res) {
     const { data_inicio, isGraduated } = req.body;
     const response = await turmasModel.addTurmas(data_inicio, isGraduated);
     res.status(200).json(response);
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({ mensage: err, error: "Erro ao puxar os dados" });
+  }
+}
+
+//DELETE
+export async function deleteTurma(req, res) {
+  try {
+    const { id } = req.params;
+    const response = await turmasModel.deleteTurma(id);
+
+    if (response.length == 0) {
+      return res.status(404).json({ error: "Registro nao encontrado" });
+    }
+
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(500).json({ mensage: err, error: "Erro ao deletar registro" });
   }
 }
