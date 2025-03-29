@@ -11,4 +11,6 @@ router.post("/adicionar", alunosController.addAluno);
 
 router.delete("/delete/:id", alunosController.deleteAluno);
 
+router.put("/patch/:id", alunosController.patchAluno);
+
 export default router;

@@ -39,3 +39,20 @@ export async function deleteProfessor(id) {
   );
   return rows;
 }
+
+//PATCH
+export async function patchProfessor(
+  nome,
+  email,
+  senha,
+  is_admin,
+  is_liberado,
+  ra_professor
+) {
+  const response = await pool.query(
+    `UPDATE Professores SET nome = ?, email = ?, senha = ?, is_admin = ?, is_liberado = ? WHERE ra_professor = ?`,
+    [nome, email, senha, is_admin, is_liberado, ra_professor]
+  );
+
+  return response;
+}

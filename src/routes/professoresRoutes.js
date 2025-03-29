@@ -10,4 +10,6 @@ router.post("/adicionar", professoresController.addProfessores);
 
 router.delete("/delete/:id", professoresController.deleteProfessor);
 
+router.put("/patch/:id", professoresController.patchProfessor);
+
 export default router;

@@ -15,4 +15,6 @@ router.post("/adicionar", turmaDisciplinaController.addTurmaDisciplina);
 
 router.delete("/delete/:id", turmaDisciplinaController.deleteTurmaDisciplina);
 
+router.put("/patch/:id", turmaDisciplinaController.patchTurmaDisciplina);
+
 export default router;

@@ -87,3 +87,21 @@ export async function deleteNotas(req, res) {
     res.status(500).json({ mensage: err, error: "Erro ao deletar registro" });
   }
 }
+
+//PATCH
+export async function patchNotas(req, res) {
+  try {
+    const { id } = req.params;
+    const { ra_aluno, id_disciplina, nota } = req.body;
+    const response = await notasModel.patchNotas(
+      ra_aluno,
+      id_disciplina,
+      nota,
+      id
+    );
+    res.status(200).json(response);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ mensage: err, error: "Erro ao puxar os dados " });
+  }
+}

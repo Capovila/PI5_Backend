@@ -61,3 +61,23 @@ export async function deleteDisciplina(id) {
   );
   return rows;
 }
+
+//PATCH
+export async function patchDisciplina(
+  id,
+  nome,
+  descricao,
+  semestre,
+  area_relacionada,
+  ra_professor
+) {
+  const [rows] = await pool.query(
+    `UPDATE Disciplinas SET  nome = ?,
+  descricao = ?,
+  semestre = ?,
+  area_relacionada = ?,
+  ra_professor = ? WHERE id_disciplina = ?`,
+    [nome, descricao, semestre, area_relacionada, ra_professor, id]
+  );
+  return rows;
+}

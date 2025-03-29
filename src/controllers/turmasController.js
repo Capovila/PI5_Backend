@@ -66,3 +66,15 @@ export async function deleteTurma(req, res) {
     res.status(500).json({ mensage: err, error: "Erro ao deletar registro" });
   }
 }
+
+//PATCh
+export async function patchTurma(req, res) {
+  try {
+    const { id } = req.params;
+    const { data_inicio, isGraduated } = req.body;
+    const response = await turmasModel.patchTurma(data_inicio, isGraduated, id);
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(500).json({ mensage: err, error: "Erro ao puxar os dados" });
+  }
+}

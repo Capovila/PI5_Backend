@@ -92,3 +92,22 @@ export async function deleteTurmaDisciplina(req, res) {
     res.status(500).json({ mensage: err, error: "Erro ao apagar registro" });
   }
 }
+
+//PATCH
+export async function patchTurmaDisciplina(req, res) {
+  try {
+    const { id } = req.params;
+    const { id_turma, id_disciplina, taxa_aprovacao, isConcluida } = req.body;
+    const response = await turmaDisciplinaModel.patchTurmaDisciplina(
+      id_turma,
+      id_disciplina,
+      taxa_aprovacao,
+      isConcluida,
+      id
+    );
+    res.status(200).json(response);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ mensage: err, error: "Erro ao puxar os dados " });
+  }
+}

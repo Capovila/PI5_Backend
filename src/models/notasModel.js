@@ -45,3 +45,13 @@ export async function deleteNotas(id) {
   const [rows] = await pool.query(`DELETE FROM Notas WHERE id_notas = ?`, [id]);
   return rows;
 }
+
+//PATCh
+export async function patchNotas(ra_aluno, id_disciplina, nota, id) {
+  const response = await pool.query(
+    `UPDATE Notas SET ra_aluno=?, id_disciplina=?, nota=? WHERE id_notas=?`,
+    [ra_aluno, id_disciplina, nota, id]
+  );
+
+  return response;
+}

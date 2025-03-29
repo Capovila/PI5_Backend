@@ -36,3 +36,12 @@ export async function deleteAluno(id) {
   ]);
   return rows;
 }
+
+//PATCH
+export async function patchAluno(id, nome, id_turma) {
+  const [rows] = await pool.query(
+    `UPDATE Alunos SET nome = ?, id_turma = ? WHERE ra_aluno = ?`,
+    [nome, id_turma, id]
+  );
+  return rows;
+}

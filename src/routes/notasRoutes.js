@@ -12,4 +12,6 @@ router.post("/adicionar", notasController.addNotas);
 
 router.delete("/delete/:id", notasController.deleteNotas);
 
+router.put("/patch/:id", notasController.patchNotas);
+
 export default router;

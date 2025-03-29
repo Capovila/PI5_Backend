@@ -63,3 +63,33 @@ export async function deleteProfessor(req, res) {
     res.status(500).json({ mensage: err, error: "Erro ao deletar registro" });
   }
 }
+
+//PATCH
+export async function patchProfessor(req, res) {
+  try {
+    let { id } = req.params;
+    let { nome, email, senha, is_admin, is_liberado } = req.body;
+
+    console.log(id);
+    const response = await professoresModel.patchProfessor(
+      nome,
+      email,
+      senha,
+      is_admin,
+      is_liberado,
+      id
+    );
+
+    if (response.length == 0) {
+      return res.status(404).json({ error: "Registro nao encontrado" });
+    }
+
+    res.status(200).json(response);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: err.message, error: "Erro ao puxar os dados" });
+  }
+}
+("");

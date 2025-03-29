@@ -55,3 +55,19 @@ export async function deleteTurmaDisciplina(id) {
   );
   return rows;
 }
+
+//PATCH
+export async function patchTurmaDisciplina(
+  id_turma,
+  id_disciplina,
+  taxa_aprovacao,
+  isConcluida,
+  id
+) {
+  const response = await pool.query(
+    `UPDATE Turma_Disciplina SET id_turma=?, id_disciplina=?, taxa_aprovacao=?, isConcluida=? WHERE id_turma_disciplina=?`,
+    [id_turma, id_disciplina, taxa_aprovacao, isConcluida, id]
+  );
+
+  return response;
+}

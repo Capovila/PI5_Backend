@@ -112,3 +112,24 @@ export async function deleteDisciplina(req, res) {
     res.status(500).json({ mensage: err, error: "Erro ao deletar registro" });
   }
 }
+
+//PATCH
+export async function patchDisciplina(req, res) {
+  try {
+    const { nome, descricao, semestre, area_relacionada, ra_professor } =
+      req.body;
+    const { id } = req.params;
+    const response = await disciplinasModel.patchDisciplina(
+      id,
+      nome,
+      descricao,
+      semestre,
+      area_relacionada,
+      ra_professor
+    );
+    res.status(200).json(response);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ mensage: err, error: "Erro ao adicionar registro" });
+  }
+}

@@ -37,3 +37,12 @@ export async function deleteTurma(id) {
   ]);
   return rows;
 }
+
+//PATCH
+export async function patchTurma(data_inicio, isGraduated, id) {
+  const response = await pool.query(
+    `UPDATE Turmas SET data_inicio=?, isGraduated=? WHERE id_turma = ?`,
+    [data_inicio, isGraduated, id]
+  );
+  return response;
+}
