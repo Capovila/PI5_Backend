@@ -10,4 +10,6 @@ router.get("/disciplina/:id", notasController.getNotasByDisciplinaId);
 
 router.post("/adicionar", notasController.addNotas);
 
+router.delete("/delete/:id", notasController.deleteNotas);
+
 export default router;

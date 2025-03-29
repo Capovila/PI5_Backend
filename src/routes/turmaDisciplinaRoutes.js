@@ -13,4 +13,6 @@ router.get(
 
 router.post("/adicionar", turmaDisciplinaController.addTurmaDisciplina);
 
+router.delete("/delete/:id", turmaDisciplinaController.deleteTurmaDisciplina);
+
 export default router;

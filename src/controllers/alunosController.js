@@ -7,7 +7,7 @@ export async function getAlunos(req, res) {
     res.status(200).json(response);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Erro ao puxar os dados" });
+    res.status(500).json({ mensage: err, error: "Erro ao puxar os dados" });
   }
 }
 
@@ -17,13 +17,15 @@ export async function getAlunosById(req, res) {
     const response = await alunosModel.getAlunosById(id);
 
     if (response.length == 0) {
-      return res.status(404).json({ error: "Registro nao encontrado" });
+      return res
+        .status(404)
+        .json({ mensage: err, error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Erro ao puxar registro" });
+    res.status(500).json({ mensage: err, error: "Erro ao puxar registro" });
   }
 }
 
@@ -33,13 +35,15 @@ export async function getAlunosByTurma(req, res) {
     const response = await alunosModel.getAlunosByTurma(turma);
 
     if (response.length == 0) {
-      return res.status(404).json({ error: "Registro nao encontrado" });
+      return res
+        .status(404)
+        .json({ mensage: err, error: "Registro nao encontrado" });
     }
 
     res.status(200).json(response);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Erro ao puxar registro" });
+    res.status(500).json({ mensage: err, error: "Erro ao puxar registro" });
   }
 }
 
@@ -51,6 +55,25 @@ export async function addAluno(req, res) {
     res.status(200).json(response);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Erro ao adicionar registro" });
+    res.status(500).json({ mensage: err, error: "Erro ao adicionar registro" });
+  }
+}
+
+//DELETE
+export async function deleteAluno(req, res) {
+  try {
+    const { id } = req.params;
+    const response = await alunosModel.deleteAluno(id);
+
+    if (response.length == 0) {
+      return res
+        .status(404)
+        .json({ mensage: err, error: "Registro nao encontrado" });
+    }
+
+    res.status(200).json(response);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ mensage: err, error: "Erro ao deletar registro" });
   }
 }

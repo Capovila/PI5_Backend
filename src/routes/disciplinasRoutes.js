@@ -14,4 +14,6 @@ router.get("/professor/:ra", disciplinasController.getDisciplinasByProfessorRa);
 
 router.post("/adicionar", disciplinasController.addDisciplina);
 
+router.delete("/delete/:id", disciplinasController.deleteDisciplina);
+
 export default router;

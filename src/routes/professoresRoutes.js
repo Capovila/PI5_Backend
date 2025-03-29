@@ -8,4 +8,6 @@ router.get("/:id", professoresController.getProfessoresById);
 
 router.post("/adicionar", professoresController.addProfessores);
 
+router.delete("/delete/:id", professoresController.deleteProfessor);
+
 export default router;

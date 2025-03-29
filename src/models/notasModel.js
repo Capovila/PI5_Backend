@@ -39,3 +39,9 @@ export async function addNotas(ra_aluno, id_disciplina, nota) {
 
   return response;
 }
+
+//DELETE
+export async function deleteNotas(id) {
+  const [rows] = await pool.query(`DELETE FROM Notas WHERE id_notas = ?`, [id]);
+  return rows;
+}

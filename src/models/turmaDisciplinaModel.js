@@ -46,3 +46,12 @@ export async function addTurmaDisciplina(
 
   return response;
 }
+
+//DELETE
+export async function deleteTurmaDisciplina(id) {
+  const [rows] = await pool.query(
+    `DELETE  FROM Turma_Disciplina WHERE id_turma_disciplina= ?`,
+    [id]
+  );
+  return rows;
+}

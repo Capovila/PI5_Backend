@@ -30,3 +30,12 @@ export async function addProfessores(
 
   return response;
 }
+
+//DELETE
+export async function deleteProfessor(id) {
+  const [rows] = await pool.query(
+    `DELETE FROM Professores WHERE ra_professor = ?`,
+    [id]
+  );
+  return rows;
+}

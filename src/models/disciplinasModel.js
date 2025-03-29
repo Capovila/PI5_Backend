@@ -52,3 +52,12 @@ export async function addDisciplina(
   );
   return response;
 }
+
+//DELETE
+export async function deleteDisciplina(id) {
+  const [rows] = await pool.query(
+    `DELETE FROM Disciplinas WHERE id_disciplina = ?`,
+    [id]
+  );
+  return rows;
+}

@@ -28,3 +28,11 @@ export async function addAlunos(ra_aluno, nome, id_turma) {
   );
   return response;
 }
+
+//DELETE
+export async function deleteAluno(id) {
+  const [rows] = await pool.query(`DELETE FROM Alunos WHERE ra_aluno = ?`, [
+    id,
+  ]);
+  return rows;
+}
