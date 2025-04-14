@@ -4,6 +4,7 @@ import * as professoresController from "../controllers/professoresController.js"
 const router = express.Router();
 
 router.get("/", professoresController.getProfessores);
+router.get("/pagination", professoresController.getProfessoresPagination);
 router.get("/:id", professoresController.getProfessoresById);
 
 router.post("/adicionar", professoresController.addProfessores);

@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/", disciplinasController.getDisciplinas);
 router.get("/area", disciplinasController.getDisciplinasByArea);
+router.get("/pagination", disciplinasController.getDisciplinasPagination);
 router.get(
   "/semestre/:semestre",
   disciplinasController.getDisciplinasBySemestre

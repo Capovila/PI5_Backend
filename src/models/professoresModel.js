@@ -14,6 +14,15 @@ export async function getProfessoresById(id) {
   return rows;
 }
 
+export async function getProfessoresPagination(limit, page) {
+  const offset = (page - 1) * limit;
+  const [rows] = await pool.query(
+    `SELECT * FROM Professores LIMIT ? OFFSET ?`,
+    [limit, offset]
+  );
+  return rows;
+}
+
 //POST
 export async function addProfessores(
   ra_professor,

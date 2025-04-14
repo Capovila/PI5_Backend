@@ -27,6 +27,22 @@ export async function getProfessoresById(req, res) {
   }
 }
 
+export async function getProfessoresPagination(req, res) {
+  try {
+    const { limit, page } = req.body;
+
+    const response = await professoresModel.getProfessoresPagination(
+      limit,
+      page
+    );
+
+    res.status(200).json(response);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ mensage: err, error: "Erro ao puxar os dados " });
+  }
+}
+
 //POST
 export async function addProfessores(req, res) {
   try {

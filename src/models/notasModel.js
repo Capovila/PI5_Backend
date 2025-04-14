@@ -30,6 +30,15 @@ export async function getNotasByAlunoId(id) {
   return rows;
 }
 
+export async function getNotasPagination(limit, page) {
+  const offset = (page - 1) * limit;
+  const [rows] = await pool.query(`SELECT * FROM Notas LIMIT ?, ?`, [
+    offset,
+    limit,
+  ]);
+  return rows;
+}
+
 //POST
 export async function addNotas(ra_aluno, id_disciplina, nota) {
   const response = await pool.query(

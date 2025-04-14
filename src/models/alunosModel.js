@@ -20,6 +20,15 @@ export async function getAlunosByTurma(turma) {
   return rows;
 }
 
+export async function getAlunosPagination(page, limit) {
+  const offset = (page - 1) * limit;
+  const [rows] = await pool.query(`SELECT * FROM Alunos LIMIT ? OFFSET ?`, [
+    limit,
+    offset,
+  ]);
+  return rows;
+}
+
 //POST
 export async function addAlunos(ra_aluno, nome, id_turma) {
   const response = await pool.query(

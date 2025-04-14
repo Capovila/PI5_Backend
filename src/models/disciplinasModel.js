@@ -38,6 +38,15 @@ export async function getDisciplinasByProfessorRa(ra) {
   return rows;
 }
 
+export async function getDisciplinasPagination(limit, page) {
+  const offset = (page - 1) * limit;
+  const [rows] = await pool.query(
+    `SELECT * FROM Disciplinas LIMIT ? OFFSET ?`,
+    [limit, offset]
+  );
+  return rows;
+}
+
 //POST
 export async function addDisciplina(
   nome,

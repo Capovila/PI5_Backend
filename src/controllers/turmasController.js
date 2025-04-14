@@ -40,6 +40,22 @@ export async function getTurmasById(req, res) {
   }
 }
 
+export async function getTurmasPagination(req, res) {
+  try {
+    const { page, limit } = req.body;
+
+    const response = await turmasModel.getTurmasPagination(page, limit);
+
+    if (response.length == 0) {
+      return res.status(404).json({ error: "Registro nao encontrado" });
+    }
+
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(500).json({ mensage: err, error: "Erro ao puxar registro" });
+  }
+}
+
 //POST
 export async function addTurmas(req, res) {
   try {

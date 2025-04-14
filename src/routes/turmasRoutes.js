@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/", turmasController.getTurmas);
 router.get("/data", turmasController.getTurmasByDate);
+router.get("/pagination", turmasController.getTurmasPagination);
 router.get("/:id", turmasController.getTurmasById);
 
 router.post("/adicionar", turmasController.addTurmas);

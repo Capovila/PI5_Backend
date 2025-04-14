@@ -44,6 +44,15 @@ Base URL: `http://localhost:8080`
 | --------- | -------- |
 | `turma`   | `number` |
 
+### Paginacao de alunos
+
+**GET** `/api/alunos/pagination`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `page`    | `number` |
+| `limit`   | `number` |
+
 ### Adicionar aluno
 
 **POST** `/api/alunos/adicionar`
@@ -115,6 +124,15 @@ Base URL: `http://localhost:8080`
 | --------- | -------- |
 | `ra`      | `number` |
 
+### Paginacao de disciplinas
+
+**GET** `/api/disciplinas/pagination`
+
+| Corpo   | Tipo     |
+| ------- | -------- |
+| `page`  | `number` |
+| `limit` | `number` |
+
 ### Adicionar disciplina
 
 **POST** `/api/disciplinas/adicionar`
@@ -166,6 +184,15 @@ Base URL: `http://localhost:8080`
 | Parâmetro | Tipo     |
 | --------- | -------- |
 | `id`      | `number` |
+
+### Paginacao de professores
+
+**GET** `/api/professores/pagination`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `page`    | `number` |
+| `limit`   | `number` |
 
 ### Adicionar professor
 
@@ -228,6 +255,15 @@ Base URL: `http://localhost:8080`
 | ------------- | ------------------- |
 | `data_inicio` | `date (yyyy-mm-dd)` |
 
+### Paginação de turmas
+
+**GET** `/api/turmas/pagination`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `page`    | `number` |
+| `limit`   | `number` |
+
 ### Adicionar turma
 
 **POST** `/api/turmas/adicionar`
@@ -257,6 +293,145 @@ Base URL: `http://localhost:8080`
 | ------------- | ------------------- |
 | `data_inicio` | `date (yyyy-mm-dd)` |
 | `isGraduated` | `boolean`           |
+
+---
+
+## Notas
+
+### Listar todas as notas
+
+**GET** `/api/notas`
+
+### Buscar nota por ID
+
+**GET** `/api/notas/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
+
+### Buscar notas por ID da disciplina
+
+**GET** `/api/notas/disciplina/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
+
+### Buscar notas por ID do aluno
+
+**GET** `/api/notas/aluno/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
+
+### Paginação de notas
+
+**GET** `/api/notas/pagination`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `page`    | `number` |
+| `limit`   | `number` |
+
+### Adicionar nota
+
+**POST** `/api/notas/adicionar`
+
+| Corpo           | Tipo     |
+| --------------- | -------- |
+| `ra_aluno`      | `number` |
+| `id_disciplina` | `number` |
+| `nota`          | `number` |
+
+### Remover nota
+
+**DELETE** `/api/notas/delete/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
+
+### Atualizar nota
+
+**PUT** `/api/notas/patch/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
+
+| Corpo           | Tipo     |
+| --------------- | -------- |
+| `ra_aluno`      | `number` |
+| `id_disciplina` | `number` |
+| `nota`          | `number` |
+
+---
+
+## Relação Turma-Disciplina
+
+### Listar todas as relações entre turmas e disciplinas
+
+**GET** `/api/turma-disciplina`
+
+### Buscar relação por ID
+
+**GET** `/api/turma-disciplina/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
+
+### Buscar todas as turmas que fazem uma disciplina específica
+
+**GET** `/api/turma-disciplina/disciplina/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
+
+### Buscar todas as disciplinas de uma turma específica
+
+**GET** `/api/turma-disciplina/turma/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
+
+### Adicionar relação entre turma e disciplina
+
+**POST** `/api/turma-disciplina/adicionar`
+
+| Corpo            | Tipo      |
+| ---------------- | --------- |
+| `id_turma`       | `number`  |
+| `id_disciplina`  | `number`  |
+| `taxa_aprovacao` | `number`  |
+| `isConcluida`    | `boolean` |
+
+### Remover relação entre turma e disciplina
+
+**DELETE** `/api/turma-disciplina/delete/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
+
+### Atualizar relação entre turma e disciplina
+
+**PUT** `/api/turma-disciplina/patch/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
+
+| Corpo            | Tipo      |
+| ---------------- | --------- |
+| `id_turma`       | `number`  |
+| `id_disciplina`  | `number`  |
+| `taxa_aprovacao` | `number`  |
+| `isConcluida`    | `boolean` |
 
 ---
 

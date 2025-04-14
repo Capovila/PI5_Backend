@@ -77,6 +77,25 @@ export async function getDisciplinasByProfessorRa(req, res) {
   }
 }
 
+export async function getDisciplinasPagination(req, res) {
+  try {
+    const { limit, page } = req.body;
+    const response = await disciplinasModel.getDisciplinasPagination(
+      limit,
+      page
+    );
+
+    if (response.length == 0) {
+      return res.status(404).json({ error: "Registro nao encontrado" });
+    }
+
+    res.status(200).json(response);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ mensage: err, error: "Erro ao puxar registro" });
+  }
+}
+
 //POST
 export async function addDisciplina(req, res) {
   try {

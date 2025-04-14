@@ -21,6 +21,15 @@ export async function getTurmaByDate(date) {
   return rows;
 }
 
+export async function getTurmasPagination(limit, page) {
+  const offset = (page - 1) * limit;
+  const [rows] = await pool.query(`SELECT * FROM Turmas LIMIT ? OFFSET ?`, [
+    limit,
+    offset,
+  ]);
+  return rows;
+}
+
 //POST
 export async function addTurmas(data_inicio, isGraduated) {
   const response = await pool.query(
