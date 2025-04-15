@@ -65,3 +65,29 @@ export async function patchProfessor(
 
   return response;
 }
+
+export async function liberarProfessor(id) {
+  const response = await pool.query(
+    `UPDATE Professores SET is_liberado = 1 WHERE ra_professor = ?`,
+    [id]
+  );
+
+  return response;
+}
+
+export async function tornarProfessorAdmin(id) {
+  const response = await pool.query(
+    `UPDATE Professores SET is_admin = 1 WHERE ra_professor = ?`,
+    [id]
+  );
+
+  return response;
+}
+export async function removerProfessorAdmin(id) {
+  const response = await pool.query(
+    `UPDATE Professores SET is_admin = 0 WHERE ra_professor = ?`,
+    [id]
+  );
+
+  return response;
+}

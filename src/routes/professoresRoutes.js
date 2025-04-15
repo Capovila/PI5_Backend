@@ -12,5 +12,8 @@ router.post("/adicionar", professoresController.addProfessores);
 router.delete("/delete/:id", professoresController.deleteProfessor);
 
 router.put("/patch/:id", professoresController.patchProfessor);
+router.put("/liberar/:id", professoresController.liberarProfessor);
+router.put("/admin/remover/:id", professoresController.removerProfessorAdmin);
+router.put("/admin/adicionar/:id", professoresController.tornarProfessorAdmin);
 
 export default router;

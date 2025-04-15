@@ -13,5 +13,6 @@ router.post("/adicionar", turmasController.addTurmas);
 router.delete("/delete/:id", turmasController.deleteTurma);
 
 router.put("/patch/:id", turmasController.patchTurma);
+router.put("/graduar/:id", turmasController.graduateTurma);
 
 export default router;

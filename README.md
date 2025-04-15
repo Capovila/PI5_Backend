@@ -231,6 +231,30 @@ Base URL: `http://localhost:8080`
 | `is_admin`    | `boolean` |
 | `is_liberado` | `boolean` |
 
+### Liberar professor
+
+**PUT** `/api/professores/liberar/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
+
+### Tornar professor administrador
+
+**PUT** `/api/professores/admin/adicionar/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
+
+### Remover professor como administrador
+
+**PUT** `/api/professores/admin/remover/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
+
 ---
 
 ## Turmas
@@ -293,6 +317,14 @@ Base URL: `http://localhost:8080`
 | ------------- | ------------------- |
 | `data_inicio` | `date (yyyy-mm-dd)` |
 | `isGraduated` | `boolean`           |
+
+### Graduar turma
+
+**PUT** `/api/turmas/graduar/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
 
 ---
 
@@ -432,6 +464,14 @@ Base URL: `http://localhost:8080`
 | `id_disciplina`  | `number`  |
 | `taxa_aprovacao` | `number`  |
 | `isConcluida`    | `boolean` |
+
+### Concluir disciplina de uma turma
+
+**PUT** `/api/turma-disciplina/concluir/:id`
+
+| Parâmetro | Tipo     |
+| --------- | -------- |
+| `id`      | `number` |
 
 ---
 

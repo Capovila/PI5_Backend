@@ -55,3 +55,11 @@ export async function patchTurma(data_inicio, isGraduated, id) {
   );
   return response;
 }
+
+export async function graduateTurma(id) {
+  const response = await pool.query(
+    `UPDATE Turmas SET isGraduated = 1 WHERE id_turma = ?`,
+    [id]
+  );
+  return response;
+}

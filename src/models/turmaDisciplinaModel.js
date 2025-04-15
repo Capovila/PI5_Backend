@@ -71,3 +71,12 @@ export async function patchTurmaDisciplina(
 
   return response;
 }
+
+export async function concluirDisciplina(id) {
+  const response = await pool.query(
+    `UPDATE Turma_Disciplina SET isConcluida=1 WHERE id_turma_disciplina=?`,
+    [id]
+  );
+
+  return response;
+}
