@@ -1,10 +1,11 @@
-import * as turmasModel from "../models/turmasModel.js";
+import { supabase } from "../config/supabase.js";
 
 //GET
 export async function getTurmas(req, res) {
   try {
-    const response = await turmasModel.getTurmas();
-    res.status(200).json(response);
+    const { data } = await supabase.from("turmas").select();
+
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json({ mensage: err, error: "Erro ao puxar os dados" });
   }
@@ -13,13 +14,17 @@ export async function getTurmas(req, res) {
 export async function getTurmasByDate(req, res) {
   try {
     const { data_inicio } = req.body;
-    const response = await turmasModel.getTurmaByDate(data_inicio);
 
-    if (response.length == 0) {
+    const { data } = await supabase
+      .from("turmas")
+      .select()
+      .eq("data_inicio", data_inicio);
+
+    if (data.length == 0 || data == null) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
-    res.status(200).json(response);
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json({ mensage: err, error: "Erro ao puxar registro" });
   }
@@ -28,13 +33,14 @@ export async function getTurmasByDate(req, res) {
 export async function getTurmasById(req, res) {
   try {
     const { id } = req.params;
-    const response = await turmasModel.getTurmaById(id);
 
-    if (response.length == 0) {
+    const { data } = await supabase.from("turmas").select().eq("id_turma", id);
+
+    if (data.length == 0 || data == null) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
-    res.status(200).json(response);
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json({ mensage: err, error: "Erro ao puxar registro" });
   }
@@ -44,13 +50,16 @@ export async function getTurmasPagination(req, res) {
   try {
     const { page, limit } = req.body;
 
-    const response = await turmasModel.getTurmasPagination(page, limit);
+    const { data } = await supabase
+      .from("turmas")
+      .select()
+      .range((page - 1) * limit, page * limit - 1);
 
-    if (response.length == 0) {
+    if (data.length == 0 || data == null) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
-    res.status(200).json(response);
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json({ mensage: err, error: "Erro ao puxar registro" });
   }
@@ -59,8 +68,17 @@ export async function getTurmasPagination(req, res) {
 //POST
 export async function addTurmas(req, res) {
   try {
-    const { data_inicio, isGraduated } = req.body;
-    const response = await turmasModel.addTurmas(data_inicio, isGraduated);
+    const { data_inicio, isgraduated } = req.body;
+
+    const response = await supabase.from("turmas").insert({
+      data_inicio,
+      isgraduated,
+    });
+
+    if (response.status != 201) {
+      return res.status(404).json({ error: "Registro nao encontrado" });
+    }
+
     res.status(200).json(response);
   } catch (err) {
     res.status(500).json({ mensage: err, error: "Erro ao puxar os dados" });
@@ -71,9 +89,10 @@ export async function addTurmas(req, res) {
 export async function deleteTurma(req, res) {
   try {
     const { id } = req.params;
-    const response = await turmasModel.deleteTurma(id);
 
-    if (response.length == 0) {
+    const response = await supabase.from("turmas").delete().eq("id_turma", id);
+
+    if (response.status != 204) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
@@ -87,8 +106,20 @@ export async function deleteTurma(req, res) {
 export async function patchTurma(req, res) {
   try {
     const { id } = req.params;
-    const { data_inicio, isGraduated } = req.body;
-    const response = await turmasModel.patchTurma(data_inicio, isGraduated, id);
+    const { data_inicio, isgraduated } = req.body;
+
+    const response = await supabase
+      .from("turmas")
+      .update({
+        data_inicio,
+        isgraduated,
+      })
+      .eq("id_turma", id);
+
+    if (response.status != 204) {
+      return res.status(404).json({ error: "Registro nao encontrado" });
+    }
+
     res.status(200).json(response);
   } catch (err) {
     res.status(500).json({ mensage: err, error: "Erro ao puxar os dados" });
@@ -98,9 +129,15 @@ export async function patchTurma(req, res) {
 export async function graduateTurma(req, res) {
   try {
     const { id } = req.params;
-    const response = await turmasModel.graduateTurma(id);
 
-    if (response.length == 0) {
+    const response = await supabase
+      .from("turmas")
+      .update({
+        isgraduated: true,
+      })
+      .eq("id_turma", id);
+
+    if (response.status != 204) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
 

@@ -7,13 +7,12 @@ router.get("/", professoresController.getProfessores);
 router.get("/pagination", professoresController.getProfessoresPagination);
 router.get("/:id", professoresController.getProfessoresById);
 
-router.post("/adicionar", professoresController.addProfessores);
+router.post("/", professoresController.addProfessores);
 
-router.delete("/delete/:id", professoresController.deleteProfessor);
+router.delete("/:id", professoresController.deleteProfessor);
 
-router.put("/patch/:id", professoresController.patchProfessor);
+router.put("/:id", professoresController.patchProfessor);
 router.put("/liberar/:id", professoresController.liberarProfessor);
-router.put("/admin/remover/:id", professoresController.removerProfessorAdmin);
-router.put("/admin/adicionar/:id", professoresController.tornarProfessorAdmin);
+router.put("/admin/:id", professoresController.professorAdmin);
 
 export default router;

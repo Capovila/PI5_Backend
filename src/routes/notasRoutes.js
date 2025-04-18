@@ -9,10 +9,10 @@ router.get("/:id", notasController.getNotasById);
 router.get("/aluno/:id", notasController.getNotasByAlunoId);
 router.get("/disciplina/:id", notasController.getNotasByDisciplinaId);
 
-router.post("/adicionar", notasController.addNotas);
+router.post("/", notasController.addNotas);
 
-router.delete("/delete/:id", notasController.deleteNotas);
+router.delete("/:id", notasController.deleteNotas);
 
-router.put("/patch/:id", notasController.patchNotas);
+router.put("/:id", notasController.patchNotas);
 
 export default router;

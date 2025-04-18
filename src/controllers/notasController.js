@@ -1,10 +1,11 @@
-import * as notasModel from "../models/notasModel.js";
+import { supabase } from "../config/supabase.js";
 
 //GET
 export async function getNotas(req, res) {
   try {
-    const response = await notasModel.getNotas();
-    res.status(200).json(response);
+    const { data } = await supabase.from("notas").select("*");
+
+    res.status(200).json(data);
   } catch (err) {
     console.log(err);
     res.status(500).json({ mensage: err, error: "Erro ao puxar os dados " });
@@ -14,13 +15,17 @@ export async function getNotas(req, res) {
 export async function getNotasById(req, res) {
   try {
     const { id } = req.params;
-    const response = await notasModel.getNotasById(id);
 
-    if (response.length == 0) {
+    const { data } = await supabase
+      .from("notas")
+      .select("*")
+      .eq("id_notas", id);
+
+    if (data == null || data.length == 0) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
-    res.status(200).json(response);
+    res.status(200).json(data);
   } catch (err) {
     console.log(err);
     res.status(500).json({ mensage: err, error: "Erro ao puxar registro" });
@@ -30,13 +35,15 @@ export async function getNotasById(req, res) {
 export async function getNotasByDisciplinaId(req, res) {
   try {
     const { id } = req.params;
-    const response = await notasModel.getNotasByDisciplinaId(id);
 
-    if (response.length == 0) {
+    const { data } = await supabase
+      .from("notas")
+      .select("*")
+      .eq("id_disciplina", id);
+    if (data == null || data.length == 0) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
-
-    res.status(200).json(response);
+    res.status(200).json(data);
   } catch (err) {
     console.log(err);
     res.status(500).json({ mensage: err, error: "Erro ao puxar registro" });
@@ -46,13 +53,15 @@ export async function getNotasByDisciplinaId(req, res) {
 export async function getNotasByAlunoId(req, res) {
   try {
     const { id } = req.params;
-    const response = await notasModel.getNotasByAlunoId(id);
 
-    if (response.length == 0) {
+    const { data } = await supabase
+      .from("notas")
+      .select("*")
+      .eq("ra_aluno", id);
+    if (data == null || data.length == 0) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
-
-    res.status(200).json(response);
+    res.status(200).json(data);
   } catch (err) {
     console.log(err);
     res.status(500).json({ mensage: err, error: "Erro ao puxar registro" });
@@ -62,13 +71,15 @@ export async function getNotasByAlunoId(req, res) {
 export async function getNotasPagination(req, res) {
   try {
     const { limit, page } = req.body;
-    const response = await notasModel.getNotasPagination(limit, page);
 
-    if (response.length == 0) {
+    const { data } = await supabase
+      .from("notas")
+      .select("*")
+      .range((page - 1) * limit, page * limit - 1);
+    if (data == null || data.length == 0) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
-
-    res.status(200).json(response);
+    res.status(200).json(data);
   } catch (err) {
     console.log(err);
     res.status(500).json({ mensage: err, error: "Erro ao puxar registro" });
@@ -79,7 +90,17 @@ export async function getNotasPagination(req, res) {
 export async function addNotas(req, res) {
   try {
     const { ra_aluno, id_disciplina, nota } = req.body;
-    const response = await notasModel.addNotas(ra_aluno, id_disciplina, nota);
+
+    const response = await supabase.from("notas").insert({
+      ra_aluno: ra_aluno,
+      id_disciplina: id_disciplina,
+      nota: nota,
+    });
+
+    if (response.status != 201) {
+      return res.status(404).json({ error: "Registro nao encontrado" });
+    }
+
     res.status(200).json(response);
   } catch (err) {
     console.log(err);
@@ -91,9 +112,10 @@ export async function addNotas(req, res) {
 export async function deleteNotas(req, res) {
   try {
     const { id } = req.params;
-    const response = await notasModel.deleteNotas(id);
 
-    if (response.length == 0) {
+    const response = await supabase.from("notas").delete().eq("id_notas", id);
+
+    if (response.status != 204) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
@@ -109,12 +131,20 @@ export async function patchNotas(req, res) {
   try {
     const { id } = req.params;
     const { ra_aluno, id_disciplina, nota } = req.body;
-    const response = await notasModel.patchNotas(
-      ra_aluno,
-      id_disciplina,
-      nota,
-      id
-    );
+
+    const response = await supabase
+      .from("notas")
+      .update({
+        ra_aluno: ra_aluno,
+        id_disciplina: id_disciplina,
+        nota: nota,
+      })
+      .eq("id_notas", id);
+
+    if (response.status != 204) {
+      return res.status(404).json({ error: "Registro nao encontrado" });
+    }
+
     res.status(200).json(response);
   } catch (err) {
     console.log(err);

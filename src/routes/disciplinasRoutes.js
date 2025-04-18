@@ -13,10 +13,10 @@ router.get(
 router.get("/:id", disciplinasController.getDisciplinasById);
 router.get("/professor/:ra", disciplinasController.getDisciplinasByProfessorRa);
 
-router.post("/adicionar", disciplinasController.addDisciplina);
+router.post("/", disciplinasController.addDisciplina);
 
-router.delete("/delete/:id", disciplinasController.deleteDisciplina);
+router.delete("/:id", disciplinasController.deleteDisciplina);
 
-router.put("/patch/:id", disciplinasController.patchDisciplina);
+router.put("/:id", disciplinasController.patchDisciplina);
 
 export default router;

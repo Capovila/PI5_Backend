@@ -55,7 +55,7 @@ Base URL: `http://localhost:8080`
 
 ### Adicionar aluno
 
-**POST** `/api/alunos/adicionar`
+**POST** `/api/alunos/`
 
 | Corpo      | Tipo     |
 | ---------- | -------- |
@@ -65,7 +65,7 @@ Base URL: `http://localhost:8080`
 
 ### Remover aluno
 
-**DELETE** `/api/alunos/delete/:id`
+**DELETE** `/api/alunos/:id`
 
 | Parâmetro | Tipo     |
 | --------- | -------- |
@@ -73,7 +73,7 @@ Base URL: `http://localhost:8080`
 
 ### Atualizar aluno
 
-**PUT** `/api/alunos/patch/:id`
+**PUT** `/api/alunos/:id`
 
 | Parâmetro | Tipo     |
 | --------- | -------- |
@@ -135,7 +135,7 @@ Base URL: `http://localhost:8080`
 
 ### Adicionar disciplina
 
-**POST** `/api/disciplinas/adicionar`
+**POST** `/api/disciplinas/`
 
 | Corpo              | Tipo     |
 | ------------------ | -------- |
@@ -147,7 +147,7 @@ Base URL: `http://localhost:8080`
 
 ### Remover disciplina
 
-**DELETE** `/api/disciplinas/delete/:id`
+**DELETE** `/api/disciplinas/:id`
 
 | Parâmetro | Tipo     |
 | --------- | -------- |
@@ -155,7 +155,7 @@ Base URL: `http://localhost:8080`
 
 ### Atualizar disciplina
 
-**PUT** `/api/disciplinas/patch/:id`
+**PUT** `/api/disciplinas//:id`
 
 | Parâmetro | Tipo     |
 | --------- | -------- |
@@ -196,7 +196,7 @@ Base URL: `http://localhost:8080`
 
 ### Adicionar professor
 
-**POST** `/api/professores/adicionar`
+**POST** `/api/professores/`
 
 | Corpo          | Tipo      |
 | -------------- | --------- |
@@ -209,7 +209,7 @@ Base URL: `http://localhost:8080`
 
 ### Remover professor
 
-**DELETE** `/api/professores/remove/:id`
+**DELETE** `/api/professores/:id`
 
 | Parâmetro | Tipo     |
 | --------- | -------- |
@@ -217,7 +217,7 @@ Base URL: `http://localhost:8080`
 
 ### Atualizar professor
 
-**PUT** `/api/professores/patch/:id`
+**PUT** `/api/professores/:id`
 
 | Parâmetro | Tipo     |
 | --------- | -------- |
@@ -290,7 +290,7 @@ Base URL: `http://localhost:8080`
 
 ### Adicionar turma
 
-**POST** `/api/turmas/adicionar`
+**POST** `/api/turmas/`
 
 | Corpo         | Tipo                |
 | ------------- | ------------------- |
@@ -299,7 +299,7 @@ Base URL: `http://localhost:8080`
 
 ### Remover turma
 
-**DELETE** `/api/turmas/remove/:id`
+**DELETE** `/api/turmas/:id`
 
 | Parâmetro | Tipo     |
 | --------- | -------- |
@@ -307,7 +307,7 @@ Base URL: `http://localhost:8080`
 
 ### Atualizar turma
 
-**PUT** `/api/turmas/patch/:id`
+**PUT** `/api/turmas/:id`
 
 | Parâmetro | Tipo     |
 | --------- | -------- |
@@ -369,7 +369,7 @@ Base URL: `http://localhost:8080`
 
 ### Adicionar nota
 
-**POST** `/api/notas/adicionar`
+**POST** `/api/notas/`
 
 | Corpo           | Tipo     |
 | --------------- | -------- |
@@ -379,7 +379,7 @@ Base URL: `http://localhost:8080`
 
 ### Remover nota
 
-**DELETE** `/api/notas/delete/:id`
+**DELETE** `/api/notas/:id`
 
 | Parâmetro | Tipo     |
 | --------- | -------- |
@@ -387,7 +387,7 @@ Base URL: `http://localhost:8080`
 
 ### Atualizar nota
 
-**PUT** `/api/notas/patch/:id`
+**PUT** `/api/notas/:id`
 
 | Parâmetro | Tipo     |
 | --------- | -------- |
@@ -433,7 +433,7 @@ Base URL: `http://localhost:8080`
 
 ### Adicionar relação entre turma e disciplina
 
-**POST** `/api/turma-disciplina/adicionar`
+**POST** `/api/turma-disciplina/`
 
 | Corpo            | Tipo      |
 | ---------------- | --------- |
@@ -444,7 +444,7 @@ Base URL: `http://localhost:8080`
 
 ### Remover relação entre turma e disciplina
 
-**DELETE** `/api/turma-disciplina/delete/:id`
+**DELETE** `/api/turma-disciplina/:id`
 
 | Parâmetro | Tipo     |
 | --------- | -------- |
@@ -452,7 +452,7 @@ Base URL: `http://localhost:8080`
 
 ### Atualizar relação entre turma e disciplina
 
-**PUT** `/api/turma-disciplina/patch/:id`
+**PUT** `/api/turma-disciplina/:id`
 
 | Parâmetro | Tipo     |
 | --------- | -------- |

@@ -8,11 +8,11 @@ router.get("/data", turmasController.getTurmasByDate);
 router.get("/pagination", turmasController.getTurmasPagination);
 router.get("/:id", turmasController.getTurmasById);
 
-router.post("/adicionar", turmasController.addTurmas);
+router.post("/", turmasController.addTurmas);
 
-router.delete("/delete/:id", turmasController.deleteTurma);
+router.delete("/:id", turmasController.deleteTurma);
 
-router.put("/patch/:id", turmasController.patchTurma);
+router.put("/:id", turmasController.patchTurma);
 router.put("/graduar/:id", turmasController.graduateTurma);
 
 export default router;
