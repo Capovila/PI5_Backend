@@ -3,7 +3,11 @@ import { supabase } from "../config/supabase.js";
 //GET
 export async function getTurmaDisciplina(req, res) {
   try {
-    const { data } = await supabase.from("turma_disciplina").select();
+    const { data } = await supabase
+      .from("turma_disciplina")
+      .select(
+        "id_turma_disciplina, id_turma, id_disciplina, taxa_aprovacao, is_concluida,  disciplinas(id_disciplina, nome, descricao, semestre, area_relacionada, ra_professor)"
+      );
     res.status(200).json(data);
   } catch (err) {
     console.log(err);
@@ -17,7 +21,9 @@ export async function getTurmasDisciplinaById(req, res) {
 
     const { data } = await supabase
       .from("turma_disciplina")
-      .select()
+      .select(
+        "id_turma_disciplina, id_turma, id_disciplina, taxa_aprovacao, is_concluida,  disciplinas(id_disciplina, nome, descricao, semestre, area_relacionada, ra_professor)"
+      )
       .eq("id_turma_disciplina", id);
 
     if (data.length == 0 || data == null) {
@@ -37,7 +43,9 @@ export async function getTurmasByDisciplinaId(req, res) {
 
     const { data } = await supabase
       .from("turma_disciplina")
-      .select()
+      .select(
+        "id_turma_disciplina, id_turma, id_disciplina, taxa_aprovacao, is_concluida,  disciplinas(id_disciplina, nome, descricao, semestre, area_relacionada, ra_professor)"
+      )
       .eq("id_disciplina", id);
 
     if (data.length == 0 || data == null) {
@@ -56,7 +64,9 @@ export async function getDisciplinaByTurmaId(req, res) {
     const { id } = req.params;
     const { data } = await supabase
       .from("turma_disciplina")
-      .select()
+      .select(
+        "id_turma_disciplina, id_turma, id_disciplina, taxa_aprovacao, is_concluida,  disciplinas(id_disciplina, nome, descricao, semestre, area_relacionada, ra_professor)"
+      )
       .eq("id_turma", id);
 
     if (data.length == 0 || data == null) {
