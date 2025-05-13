@@ -1,6 +1,6 @@
 import sys
 import os
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 from supabase_client import supabase
 
@@ -40,5 +40,8 @@ def get_professor_by_id(id):
         print(err)
         return jsonify({"error": "Erro ao puxar registro"})
     
+@professores_bp.route("/pagination", methods=["POST"])
+def get_professor_pagination():
+    data = request.json
 
 
