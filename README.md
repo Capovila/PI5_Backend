@@ -4,15 +4,6 @@ Rotas e configurações da API
 
 ## Apêndice
 
-Abrir arquivo .env e inserir seguintes campos
-
-```
-PASSWORD= senha do banco para o usuario
-HOST= ip do banco (127.0.0.1 para localhost)
-DATABASE= nome do database utilizado
-LOCAL_USER= usuario utilizado
-```
-
 - npm i para instalar pacotes
 - npm run dev para rodar backend
 
