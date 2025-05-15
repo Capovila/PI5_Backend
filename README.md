@@ -102,7 +102,7 @@ Base URL: `http://localhost:8080`
 
 ### Buscar disciplinas por área
 
-**GET** `/api/disciplinas/area`
+**GET** `/api/disciplinas/area/:area_relacionada`
 
 | Corpo              | Tipo     |
 | ------------------ | -------- |
