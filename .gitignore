@@ -1,3 +1,4 @@
 .env
 node
 __pycache__
+.venv

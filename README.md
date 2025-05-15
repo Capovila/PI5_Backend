@@ -4,21 +4,15 @@ Rotas e configurações da API
 
 ## Apêndice
 
-Abrir arquivo .env e inserir seguintes campos
+criar um .venv pelo VsCode
+caso na consiga entrar no venv, rode no terminal: source .venv/bin/activate
 
-```
-PASSWORD= senha do banco para o usuario
-HOST= ip do banco (127.0.0.1 para localhost)
-DATABASE= nome do database utilizado
-LOCAL_USER= usuario utilizado
-```
-
-- npm i para instalar pacotes
-- npm run dev para rodar backend
+pip install Flask
+pip install Supabase
 
 ## Documentação da API
 
-Base URL: `http://localhost:8080`
+Base URL: `http://localhost:3030`
 
 ---
 

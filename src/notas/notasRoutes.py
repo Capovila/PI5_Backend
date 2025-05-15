@@ -1,15 +1,11 @@
 import sys
 import os
 from flask import Blueprint, jsonify, request
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 from supabase_client import supabase
 
 notas_bp = Blueprint("notas", __name__, url_prefix="/notas")
 
-
-#router.delete("/:id", notasController.deleteNotas);
-
-#router.put("/:id", notasController.patchNotas);
 
 @notas_bp.route("/", methods=["GET"])
 def get_disciplinas():
@@ -115,3 +111,48 @@ def add_nota():
     except Exception as err:
         print(err)
         return jsonify({"error": "Erro ao inserir a nota"}), 500
+    
+@notas_bp.route("/<int:id>", methods=["DELETE"])
+def delete_nota(id):
+    try:
+        # Deleta a nota no Supabase com base no ID
+        response = supabase.table("notas").delete().eq("id_notas", id).execute()
+
+        # Verifica se algum registro foi deletado
+        if not response.data:
+            return jsonify({"error": "Registro não encontrado"}), 404
+
+        return jsonify({"message": "Nota deletada com sucesso"}), 200
+    except Exception as err:
+        print(err)
+        return jsonify({"error": "Erro ao deletar a nota"}), 500
+    
+@notas_bp.route("/<int:id>", methods=["PUT"])
+def update_nota(id):
+    try:
+        data = request.json
+        ra_aluno = data.get("ra_aluno")
+        id_disciplina = data.get("id_disciplina")
+        nota = data.get("nota")
+
+        # Verifica se pelo menos um campo foi fornecido para atualização
+        if ra_aluno is None and id_disciplina is None and nota is None:
+            return jsonify({"error": "Nenhum campo para atualizar"}), 400
+
+        update_fields = {}
+        if ra_aluno is not None:
+            update_fields["ra_aluno"] = ra_aluno
+        if id_disciplina is not None:
+            update_fields["id_disciplina"] = id_disciplina
+        if nota is not None:
+            update_fields["nota"] = nota
+
+        response = supabase.table("notas").update(update_fields).eq("id_notas", id).execute()
+
+        if not response.data:
+            return jsonify({"error": "Registro não encontrado"}), 404
+
+        return jsonify({"message": "Nota atualizada com sucesso"}), 200
+    except Exception as err:
+        print(err)
+        return jsonify({"error": "Erro ao atualizar a nota"}), 500

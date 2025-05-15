@@ -1,7 +1,7 @@
 import sys
 import os
 from flask import Blueprint, jsonify, request
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 from supabase_client import supabase
 
 professores_bp = Blueprint("professores", __name__, url_prefix="/professores")
