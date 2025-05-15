@@ -3,6 +3,7 @@ from professores.professoresRoutes import professores_bp
 from turmas.turmasRoutes import turmas_bp
 from disciplinas.disciplinasRoutes import disciplinas_bp
 from alunos.alunosRoutes import alunos_bp
+from notas.notasRoutes import notas_bp
 import os
 os.environ["WERKZEUG_DEBUG_PIN"] = "off"
 app = Flask(__name__)
@@ -10,7 +11,7 @@ app.register_blueprint(professores_bp)
 app.register_blueprint(turmas_bp)
 app.register_blueprint(disciplinas_bp)
 app.register_blueprint(alunos_bp)
-
+app.register_blueprint(notas_bp)
 
 @app.route("/", methods=["GET"])
 def home():
