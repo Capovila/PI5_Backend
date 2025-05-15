@@ -6,13 +6,6 @@ from supabase_client import supabase
 
 turma_disciplina_bp = Blueprint("turmaDisciplina", __name__, url_prefix="/turmaDisciplina")
 
-
-
-
-# router.delete("/:id", turmaDisciplinaController.deleteTurmaDisciplina);
-
-
-
 @turma_disciplina_bp.route("/", methods=["GET"])
 def get_turma_disciplina():
     try:
