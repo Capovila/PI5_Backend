@@ -1,4 +1,4 @@
 .env
 node
 __pycache__
-professores/__pycache__
+,venv
