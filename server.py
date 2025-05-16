@@ -1,4 +1,6 @@
 from flask import Flask
+
+from src.linearRegression.linearRegressionRoutes import regression_model_bp
 from src.professores.professoresRoutes import professores_bp
 from src.turmas.turmasRoutes import turmas_bp
 from src.disciplinas.disciplinasRoutes import disciplinas_bp
@@ -14,6 +16,7 @@ app.register_blueprint(disciplinas_bp)
 app.register_blueprint(alunos_bp)
 app.register_blueprint(notas_bp)
 app.register_blueprint(turma_disciplina_bp)
+app.register_blueprint(regression_model_bp)
 
 @app.route("/", methods=["GET"])
 def home():

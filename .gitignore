@@ -2,3 +2,4 @@
 node
 __pycache__
 .venv
+.idea
