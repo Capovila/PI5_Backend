@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 
 from src.linearRegression.linearRegressionRoutes import regression_model_bp
 from src.professores.professoresRoutes import professores_bp
@@ -10,6 +11,7 @@ from src.turmaDisciplina.turmaDisciplinaRoutes import turma_disciplina_bp
 import os
 os.environ["WERKZEUG_DEBUG_PIN"] = "off"
 app = Flask(__name__)
+CORS(app)
 app.register_blueprint(professores_bp)
 app.register_blueprint(turmas_bp)
 app.register_blueprint(disciplinas_bp)
