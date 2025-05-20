@@ -13,7 +13,7 @@ export async function getTurmas(req, res) {
 
 export async function getTurmasByDate(req, res) {
   try {
-    const { data_inicio } = req.body;
+    const data_inicio = String(req.query.data_inicio);
 
     const { data } = await supabase
       .from("turmas")
