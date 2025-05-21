@@ -168,7 +168,7 @@ export async function patchDisciplina(req, res) {
         area_relacionada,
         ra_professor,
       })
-      .eq("id_disciplina", id);
+      .eq("id_disciplina", id).select();
 
     if (response.status != 200) {
       return res.status(404).json({ error: "Registro nao encontrado" });
