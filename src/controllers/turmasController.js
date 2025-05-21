@@ -73,13 +73,14 @@ export async function addTurmas(req, res) {
     const response = await supabase.from("turmas").insert({
       data_inicio,
       isgraduated,
-    });
+    }).select();
 
     if (response.status != 201) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
-    res.status(200).json(response);
+    const idTurma = response.data[0].id_turma
+    res.status(200).json({ idTurma });
   } catch (err) {
     res.status(500).json({ mensage: err, error: "Erro ao puxar os dados" });
   }

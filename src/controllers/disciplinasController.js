@@ -120,11 +120,11 @@ export async function addDisciplina(req, res) {
       ra_professor,
     });
 
-    if (response.status != 201) {
+    if (response.error) {
       return res.status(404).json({ error: "Registro nao encontrado" });
     }
 
-    res.status(200).json(response);
+    res.status(201).json(response);
   } catch (err) {
     console.log(err);
     res.status(500).json({ mensage: err, error: "Erro ao adicionar registro" });
