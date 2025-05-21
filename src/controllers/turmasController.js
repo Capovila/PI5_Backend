@@ -91,6 +91,8 @@ export async function deleteTurma(req, res) {
   try {
     const { id } = req.params;
 
+    await supabase.from("turma_disciplina").delete().eq("id_turma", id);
+
     const response = await supabase.from("turmas").delete().eq("id_turma", id);
 
     if (response.status != 204) {
