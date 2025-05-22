@@ -145,6 +145,44 @@ def add_turma_disciplina():
     except Exception as err:
         print(err)
         return jsonify({"error": "Erro ao inserir registro"}), 500
+    
+@turma_disciplina_bp.route("/importar_csv", methods=["POST"])
+def importar_turma_disciplina_csv():
+    try:
+        payload = request.json
+        csv_data = payload.get("data")
+        print("CSV Data:", csv_data)
+
+        if not csv_data:
+            return jsonify({"error": "Nenhum dado fornecido."}), 400
+        
+        turmas_disciplinas_formatadas = []
+        for linha in csv_data:
+            try:
+                turma_disciplina = {
+                    "id_turma": int(linha["id_turma"]),
+                    "id_disciplina": int(linha["id_disciplina"]),
+                    "taxa_aprovacao": linha["taxa_aprovacao"] if linha["is_concluida"] else None,
+                    "is_concluida": linha["is_concluida"],
+                }
+                turmas_disciplinas_formatadas.append(turma_disciplina)
+            except (KeyError, ValueError) as e:
+                print(f"Erro ao processar linha: {linha}, erro: {e}")
+                continue
+
+        if not turmas_disciplinas_formatadas:
+            return jsonify({"error": "Nenhum registro válido para importar."}), 400
+
+        response = supabase.table("turma_disciplina").insert(turmas_disciplinas_formatadas).execute()
+
+        return jsonify({
+            "message": f"{len(turmas_disciplinas_formatadas)} turmas_disciplinas inseridos com sucesso.",
+            "data": response.data
+        }), 201
+
+    except Exception as err:
+        print("Erro ao importar turmas_disciplinas via CSV:", err)
+        return {"error": str(err)}, 500
 
 @turma_disciplina_bp.route("/<int:id>", methods=["DELETE"])
 def delete_turma_disciplina(id):

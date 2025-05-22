@@ -112,6 +112,43 @@ def add_nota():
         print(err)
         return jsonify({"error": "Erro ao inserir a nota"}), 500
     
+@notas_bp.route("/importar_csv", methods=["POST"])
+def importar_notas_csv():
+    try:
+        payload = request.json
+        csv_data = payload.get("data")
+        print("CSV Data:", csv_data)
+
+        if not csv_data:
+            return jsonify({"error": "Nenhum dado fornecido."}), 400
+
+        notas_formatadas = []
+        for linha in csv_data:
+            try:
+                nota = {
+                    "ra_aluno": int(linha["ra_aluno"]),
+                    "id_disciplina": int(linha["id_disciplina"]),
+                    "nota": float(linha["nota"])
+                }
+                notas_formatadas.append(nota)
+            except (KeyError, ValueError) as e:
+                print(f"Erro ao processar linha: {linha}, erro: {e}")
+                continue
+
+        if not notas_formatadas:
+            return jsonify({"error": "Nenhum registro válido para importar."}), 400
+
+        response = supabase.table("notas").insert(notas_formatadas).execute()
+
+        return jsonify({
+            "message": f"{len(notas_formatadas)} notas inseridos com sucesso.",
+            "data": response.data
+        }), 201
+
+    except Exception as err:
+        print("Erro ao importar notas via CSV:", err)
+        return {"error": str(err)}, 500
+    
 @notas_bp.route("/<int:id>", methods=["DELETE"])
 def delete_nota(id):
     try:

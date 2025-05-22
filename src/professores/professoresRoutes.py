@@ -82,6 +82,46 @@ def add_professores():
     except Exception as err:
         print(err)
         return jsonify({"error": "Erro ao inserir o registro"}), 500
+    
+@professores_bp.route("/importar_csv", methods=["POST"])
+def importar_professores_csv():
+    try:
+        payload = request.json
+        csv_data = payload.get("data")
+        print("CSV Data:", csv_data)
+
+        if not csv_data:
+            return jsonify({"error": "Nenhum dado fornecido."}), 400
+
+        professores_formatados = []
+        for linha in csv_data:
+            try:
+                professor = {
+                    "ra_professor": int(linha["ra_professor"]),
+                    "nome": linha["nome"],
+                    "email": linha["email"],
+                    "senha": "123456",
+                    "is_admin": False,
+                    "is_liberado": True
+                }
+                professores_formatados.append(professor)
+            except (KeyError, ValueError) as e:
+                print(f"Erro ao processar linha: {linha}, erro: {e}")
+                continue
+
+        if not professores_formatados:
+            return jsonify({"error": "Nenhum registro válido para importar."}), 400
+
+        response = supabase.table("professores").insert(professores_formatados).execute()
+
+        return jsonify({
+            "message": f"{len(professores_formatados)} professores inseridos com sucesso.",
+            "data": response.data
+        }), 201
+
+    except Exception as err:
+        print("Erro ao importar professores via CSV:", err)
+        return {"error": str(err)}, 500
 
 @professores_bp.route("/<int:id>", methods=["DELETE"])
 def delete_professor(id):

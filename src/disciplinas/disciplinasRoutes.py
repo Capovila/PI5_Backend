@@ -107,19 +107,35 @@ def add_disciplina():
         data = request.json
         nome = data.get("nome")
         descricao = data.get("descricao")
-        area_relacionada = data.get("area_relacionada")
+        teor_programacao = data.get("teor_programacao")
+        teor_matematica = data.get("teor_matematica")
+        teor_testes = data.get("teor_testes")
+        teor_banco_dados = data.get("teor_banco_dados")
+        teor_frontend = data.get("teor_frontend")
+        teor_backend = data.get("teor_backend")
+        teor_requisitos = data.get("teor_requisitos")
+        teor_ux = data.get("teor_ux")
+        teor_gestao = data.get("teor_gestao")
         semestre = data.get("semestre")
         ra_professor = data.get("ra_professor")
 
         # Verifica se os campos obrigatórios foram fornecidos
-        if not nome or not area_relacionada or not semestre or not ra_professor:
+        if not nome or not teor_programacao or not teor_matematica or not teor_testes or not teor_banco_dados or not teor_frontend or not teor_backend or not teor_requisitos or not teor_ux or not teor_gestao or not semestre or not ra_professor:
             return jsonify({"error": "Campos obrigatórios não fornecidos"}), 400
 
         # Insere o registro no Supabase
         response = supabase.table("disciplinas").insert({
             "nome": nome,
             "descricao": descricao,
-            "area_relacionada": area_relacionada,
+            "teor_programacao": teor_programacao,
+            "teor_matematica": teor_matematica,
+            "teor_testes": teor_testes,
+            "teor_banco_dados": teor_banco_dados,
+            "teor_frontend": teor_frontend,
+            "teor_backend": teor_backend,
+            "teor_requisitos": teor_requisitos,
+            "teor_ux": teor_ux,
+            "teor_gestao": teor_gestao,
             "semestre": semestre,
             "ra_professor": ra_professor
         }).execute()
@@ -132,6 +148,53 @@ def add_disciplina():
     except Exception as err:
         print(err)
         return jsonify({"error": "Erro ao inserir a disciplina"}), 500
+    
+@disciplinas_bp.route("/importar_csv", methods=["POST"])
+def importar_disciplinas_csv():
+    try:
+        payload = request.json
+        csv_data = payload.get("data")
+        print("CSV Data:", csv_data)
+
+        if not csv_data:
+            return jsonify({"error": "Nenhum dado fornecido."}), 400
+
+        disciplinas_formatadas = []
+        for linha in csv_data:
+            try:
+                disciplina = {
+                    "nome": linha["nome"],
+                    "descricao": linha["descricao"],
+                    "teor_programacao": float(linha["teor_programacao"]),
+                    "teor_matematica": float(linha["teor_matematica"]),
+                    "teor_testes": float(linha["teor_testes"]),
+                    "teor_banco_dados": float(linha["teor_banco_dados"]),
+                    "teor_frontend": float(linha["teor_frontend"]),
+                    "teor_backend": float(linha["teor_backend"]),
+                    "teor_requisitos": float(linha["teor_requisitos"]),
+                    "teor_ux": float(linha["teor_ux"]),
+                    "teor_gestao": float(linha["teor_gestao"]),
+                    "semestre": int(linha["semestre"]),
+                    "ra_professor": int(linha["ra_professor"])
+                }
+                disciplinas_formatadas.append(disciplina)
+            except (KeyError, ValueError) as e:
+                print(f"Erro ao processar linha: {linha}, erro: {e}")
+                continue
+
+        if not disciplinas_formatadas:
+            return jsonify({"error": "Nenhum registro válido para importar."}), 400
+
+        response = supabase.table("disciplinas").insert(disciplinas_formatadas).execute()
+
+        return jsonify({
+            "message": f"{len(disciplinas_formatadas)} disciplinas inseridos com sucesso.",
+            "data": response.data
+        }), 201
+
+    except Exception as err:
+        print("Erro ao importar disciplinas via CSV:", err)
+        return {"error": str(err)}, 500
     
 @disciplinas_bp.route("/<int:id>", methods=["DELETE"])
 def delete_disciplina(id):
@@ -155,19 +218,35 @@ def update_disciplina(id):
         data = request.json
         nome = data.get("nome")
         descricao = data.get("descricao")
-        area_relacionada = data.get("area_relacionada")
+        teor_programacao = data.get("teor_programacao")
+        teor_matematica = data.get("teor_matematica")
+        teor_testes = data.get("teor_testes")
+        teor_banco_dados = data.get("teor_banco_dados")
+        teor_frontend = data.get("teor_frontend")
+        teor_backend = data.get("teor_backend")
+        teor_requisitos = data.get("teor_requisitos")
+        teor_ux = data.get("teor_ux")
+        teor_gestao = data.get("teor_gestao")
         semestre = data.get("semestre")
         ra_professor = data.get("ra_professor")
 
         # Verifica se os campos obrigatórios foram fornecidos
-        if not nome or not area_relacionada or not semestre or not ra_professor:
+        if not nome or not teor_programacao or not teor_matematica or not teor_testes or not teor_banco_dados or not teor_frontend or not teor_backend or not teor_requisitos or not teor_ux or not teor_gestao or not semestre or not ra_professor:
             return jsonify({"error": "Campos obrigatórios não fornecidos"}), 400
 
         # Atualiza o registro no Supabase
         response = supabase.table("disciplinas").update({
             "nome": nome,
             "descricao": descricao,
-            "area_relacionada": area_relacionada,
+            "teor_programacao": teor_programacao,
+            "teor_matematica": teor_matematica,
+            "teor_testes": teor_testes,
+            "teor_banco_dados": teor_banco_dados,
+            "teor_frontend": teor_frontend,
+            "teor_backend": teor_backend,
+            "teor_requisitos": teor_requisitos,
+            "teor_ux": teor_ux,
+            "teor_gestao": teor_gestao,
             "semestre": semestre,
             "ra_professor": ra_professor
         }).eq("id_disciplina", id).execute()
