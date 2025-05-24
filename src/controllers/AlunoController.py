@@ -16,7 +16,7 @@ class AlunoController:
         self.alunos_bp.route("/pagination", methods=["GET"])(self.get_alunos_pagination)
         self.alunos_bp.route("/turma/<int:turma>", methods=["GET"])(self.get_alunos_by_turma)
         self.alunos_bp.route("/", methods=["POST"])(self.add_aluno)
-        self.alunos_bp.route("/importar_csv", methods=["POST"])(self.importar_alunos_csv)
+        self.alunos_bp.route("/importar_csv", methods=["POST"])(self.add_alunos_from_csv)
         self.alunos_bp.route("/<int:id>", methods=["DELETE"])(self.delete_aluno)
         self.alunos_bp.route("/<int:id>", methods=["PUT"])(self.update_aluno)
 
@@ -104,7 +104,7 @@ class AlunoController:
             return jsonify({"error": "Erro ao inserir o aluno"}), 500
 
 
-    def importar_alunos_csv(self):
+    def add_alunos_from_csv(self):
         try:
             payload = request.json
             csv_data = payload.get("data")
