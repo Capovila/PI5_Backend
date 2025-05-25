@@ -3,7 +3,7 @@ import os
 from flask import Blueprint, jsonify, request
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-from supabase_client import supabase
+from src.infrastructure.supabase_client import supabase
 
 class DisciplinaController:
     def __init__(self):

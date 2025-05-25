@@ -8,6 +8,7 @@ from src.controllers.ProfessorController import ProfessorController
 from src.controllers.RegressaoLinearController import RegressaoLinearController
 from src.controllers.TurmaController import TurmaController
 from src.controllers.TurmaDisciplinaController import TurmaDisciplinaController
+from src.domain.exceptions.ExceptionHandler import ExceptionHandler
 
 import os
 
@@ -30,6 +31,8 @@ app.register_blueprint(notaController.notas_bp)
 app.register_blueprint(professorController.professores_bp)
 app.register_blueprint(turmaController.turmas_bp)
 app.register_blueprint(turmaDisciplinaController.turma_disciplina_bp)
+
+exceptionHandler = ExceptionHandler(app)
 
 @app.route("/", methods=["GET"])
 def home():

@@ -2,12 +2,12 @@ import sys
 import os
 
 import pandas as pd
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 
 from src.services.linearRegressionService import train_linear_regression
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-from supabase_client import supabase
+from src.infrastructure.supabase_client import supabase
 
 class RegressaoLinearController:
     def __init__(self):
