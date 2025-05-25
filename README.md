@@ -4,12 +4,15 @@ Rotas e configurações da API
 
 ## Apêndice
 
-- npm i para instalar pacotes
-- npm run dev para rodar backend
+criar um .venv pelo VsCode
+caso na consiga entrar no venv, rode no terminal: source .venv/bin/activate
+
+pip install Flask
+pip install Supabase
 
 ## Documentação da API
 
-Base URL: `http://localhost:8080`
+Base URL: `http://localhost:3030`
 
 ---
 
@@ -93,7 +96,7 @@ Base URL: `http://localhost:8080`
 
 ### Buscar disciplinas por área
 
-**GET** `/api/disciplinas/area`
+**GET** `/api/disciplinas/area/:area_relacionada`
 
 | Corpo              | Tipo     |
 | ------------------ | -------- |
