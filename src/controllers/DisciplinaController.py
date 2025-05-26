@@ -115,35 +115,19 @@ class DisciplinaController:
             data = request.json
             nome = data.get("nome")
             descricao = data.get("descricao")
-            teor_programacao = data.get("teor_programacao")
-            teor_matematica = data.get("teor_matematica")
-            teor_testes = data.get("teor_testes")
-            teor_banco_dados = data.get("teor_banco_dados")
-            teor_frontend = data.get("teor_frontend")
-            teor_backend = data.get("teor_backend")
-            teor_requisitos = data.get("teor_requisitos")
-            teor_ux = data.get("teor_ux")
-            teor_gestao = data.get("teor_gestao")
+            dificuldade = data.get("dificuldade")
             semestre = data.get("semestre")
             ra_professor = data.get("ra_professor")
 
             # Verifica se os campos obrigatórios foram fornecidos
-            if not nome or not teor_programacao or not teor_matematica or not teor_testes or not teor_banco_dados or not teor_frontend or not teor_backend or not teor_requisitos or not teor_ux or not teor_gestao or not semestre or not ra_professor:
+            if not nome or not dificuldade or not semestre or not ra_professor:
                 return jsonify({"error": "Campos obrigatórios não fornecidos"}), 400
 
             # Insere o registro no Supabase
             response = supabase.table("disciplinas").insert({
                 "nome": nome,
                 "descricao": descricao,
-                "teor_programacao": teor_programacao,
-                "teor_matematica": teor_matematica,
-                "teor_testes": teor_testes,
-                "teor_banco_dados": teor_banco_dados,
-                "teor_frontend": teor_frontend,
-                "teor_backend": teor_backend,
-                "teor_requisitos": teor_requisitos,
-                "teor_ux": teor_ux,
-                "teor_gestao": teor_gestao,
+                "dificuldade": dificuldade,
                 "semestre": semestre,
                 "ra_professor": ra_professor
             }).execute()
@@ -172,15 +156,7 @@ class DisciplinaController:
                     disciplina = {
                         "nome": linha["nome"],
                         "descricao": linha["descricao"],
-                        "teor_programacao": float(linha["teor_programacao"]),
-                        "teor_matematica": float(linha["teor_matematica"]),
-                        "teor_testes": float(linha["teor_testes"]),
-                        "teor_banco_dados": float(linha["teor_banco_dados"]),
-                        "teor_frontend": float(linha["teor_frontend"]),
-                        "teor_backend": float(linha["teor_backend"]),
-                        "teor_requisitos": float(linha["teor_requisitos"]),
-                        "teor_ux": float(linha["teor_ux"]),
-                        "teor_gestao": float(linha["teor_gestao"]),
+                        "dificuldade": float(linha["dificuldade"]),
                         "semestre": int(linha["semestre"]),
                         "ra_professor": int(linha["ra_professor"])
                     }
