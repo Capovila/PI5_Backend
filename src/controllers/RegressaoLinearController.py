@@ -1,6 +1,8 @@
 import pandas as pd
 from flask import Blueprint, jsonify, request
-from src.services.LinearRegressionService import train_linear_regression_model, predict_average_grade_for_turma
+import traceback
+
+from src.services.LinearRegressionService import train_linear_regression_model, predict_grades_and_approval_rate
 from src.infrastructure.supabase_client import supabase 
 
 class RegressaoLinearController:
@@ -9,10 +11,13 @@ class RegressaoLinearController:
         self._register_routes()
 
     def _register_routes(self):
-        self.regressao_linear_bp.route("/treinar_modelo_media_turma", methods=["POST"])(self.train_model_endpoint) 
-        self.regressao_linear_bp.route("/prever_media_disciplina_turma", methods=["POST"])(self.predict_model_endpoint)
+        self.regressao_linear_bp.route("/treinar_modelo_nota", methods=["POST"])(self.train_model_endpoint) 
+        self.regressao_linear_bp.route("/prever_desempenho_turma", methods=["POST"])(self.predict_model_endpoint)
 
     def train_model_endpoint(self):
+        """
+        Endpoint para treinar o modelo de regressão que prevê a nota dos alunos.
+        """
         try:
             response = supabase.rpc('get_dataset_completo_para_treino').execute()
             
@@ -21,19 +26,26 @@ class RegressaoLinearController:
             
             df_treino = pd.DataFrame(response.data)
 
-            colunas_necessarias_treino = ['ra_aluno', 'id_disciplina', 'nota', 'id_turma', 'dificuldade', 'semestre', 'data_inicio_aluno']
-            for col in colunas_necessarias_treino:
+            colunas_necessarias = ['ra_aluno', 'id_disciplina', 'nota', 'id_turma', 'dificuldade', 'semestre']
+            for col in colunas_necessarias:
                 if col not in df_treino.columns:
-                    return jsonify({"error": f"Coluna '{col}' essencial para o treino não encontrada nos dados do Supabase. Verifique a RPC 'get_dataset_completo_para_treino'."}), 500
+                    return jsonify({"error": f"Coluna essencial '{col}' não encontrada nos dados. Verifique a RPC 'get_dataset_completo_para_treino'."}), 500
 
             resultado_treino = train_linear_regression_model(df_treino)
+            if "error" in resultado_treino:
+                return jsonify(resultado_treino), 400
+            
             return jsonify(resultado_treino), 200
+
         except Exception as err:
-            import traceback
             tb_str = traceback.format_exc()
-            return jsonify({"error": f"Erro ao treinar o modelo: {str(err)}", "traceback": tb_str}), 500
+            return jsonify({"error": f"Erro crítico ao treinar o modelo: {str(err)}", "traceback": tb_str}), 500
 
     def predict_model_endpoint(self):
+        """
+        Endpoint que prevê a média da nota E a taxa de aprovação de uma turma
+        para uma disciplina futura.
+        """
         try:
             dados_requisicao = request.get_json()
             if not dados_requisicao or 'id_turma_alvo' not in dados_requisicao or 'id_disciplina_futura' not in dados_requisicao:
@@ -47,34 +59,43 @@ class RegressaoLinearController:
 
             response_historico = supabase.rpc('get_dataset_completo_para_treino').execute()
             if not response_historico.data:
-                 return jsonify({"error": "Nenhum dado histórico encontrado no Supabase para fazer a previsão."}), 500
+                return jsonify({
+                    "status": "previsao_indisponivel",
+                    "mensagem": "Não há dados históricos para os alunos desta turma.",
+                    "resultado_previsao": None
+                }), 200
             
             df_historico_completo = pd.DataFrame(response_historico.data)
 
-            colunas_necessarias_previsao = ['ra_aluno', 'id_disciplina', 'nota', 'id_turma'] 
-            if 'dificuldade' not in df_historico_completo.columns:
-                 colunas_necessarias_previsao.append('dificuldade')
-
-
-            for col in colunas_necessarias_previsao:
-                if col not in df_historico_completo.columns:
-                    return jsonify({"error": f"Coluna '{col}' essencial para a previsão não encontrada nos dados históricos do Supabase. Verifique a RPC 'get_dataset_completo_para_treino'."}), 500
-
-
-            resultado_previsao = predict_average_grade_for_turma(
+            resultado_previsao = predict_grades_and_approval_rate(
                 id_turma_alvo,
                 id_disciplina_futura, 
                 df_historico_completo
             )
             
             if "erro" in resultado_previsao: 
-                status_code = 400  
-                if "Modelo não está carregado" in resultado_previsao.get("erro","") or "Erro ao buscar dados da disciplina" in resultado_previsao.get("erro",""):
-                    status_code = 500 
-                return jsonify(resultado_previsao), status_code
+                return jsonify({
+                    "status": "previsao_indisponivel",
+                    "mensagem": "Não há dados históricos para os alunos desta turma.",
+                    "resultado_previsao": None
+                }), 200
             
-            return jsonify(resultado_previsao), 200
+            return jsonify({
+                    "status": "sucesso",
+                    "mensagem": "Previsão feita com sucesso para os aulunos desta turma.",
+                    "resultado_previsao": resultado_previsao
+                }), 200
+            
         except Exception as err:
-            import traceback
             tb_str = traceback.format_exc()
-            return jsonify({"error": f"Erro ao fazer a previsão: {str(err)}", "traceback": tb_str}), 500
+            # Adicione prints para ver o erro no console do Flask
+            print(f"==== ERRO CRÍTICO NA PREVISÃO ====")
+            print(f"ID Turma Alvo: {dados_requisicao.get('id_turma_alvo', 'N/A')}") # Adiciona contexto
+            print(f"ID Disciplina Futura: {dados_requisicao.get('id_disciplina_futura', 'N/A')}") # Adiciona contexto
+            print(tb_str) # Imprime o traceback completo
+            print(f"===================================")
+            return jsonify({
+                "status": "erro_servidor", # Melhor enviar um status claro para o frontend
+                "mensagem": f"Erro crítico interno ao processar a previsão: {str(err)}",
+                "detalhes": tb_str # Opcional, mas útil para depuração no frontend se você quiser
+            }), 500
