@@ -2,7 +2,7 @@ import pandas as pd
 from flask import Blueprint, jsonify, request
 import traceback
 
-from src.services.LinearRegressionService import train_linear_regression_model, predict_grades_and_approval_rate
+from src.services.linearRegressionService import train_linear_regression_model, predict_grades_and_approval_rate
 from src.infrastructure.supabase_client import supabase 
 
 class RegressaoLinearController:

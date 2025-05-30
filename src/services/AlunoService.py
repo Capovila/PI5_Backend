@@ -28,7 +28,7 @@ class AlunoService:
     def findAlunosByTurma(self, id_turma: int) -> list[Aluno]:
         alunos = self.alunoRepository.findAlunosByTurma(id_turma)
         if not alunos:
-            raise ResourceNotFoundException(f"Aluno não encontrado.")
+            raise ResourceNotFoundException(f"Alunos não encontrados.")
         return alunos
 
     def addAluno(self, aluno: Aluno) -> Aluno:

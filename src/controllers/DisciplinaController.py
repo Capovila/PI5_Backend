@@ -2,13 +2,17 @@ import sys
 import os
 from flask import Blueprint, jsonify, request
 
+from src.domain.Disciplina import Disciplina
+from src.domain.exceptions.BadRequestException import BadRequestException
+from src.services.DisciplinaService import DisciplinaService
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-from src.infrastructure.supabase_client import supabase
 
 class DisciplinaController:
     def __init__(self):
         self.disciplinas_bp = Blueprint("disciplinas", __name__, url_prefix="/disciplinas")
         self._register_routes()
+        self.disciplinaService: DisciplinaService = DisciplinaService()
 
     def _register_routes(self):
         self.disciplinas_bp.route("/", methods=["GET"])(self.get_disciplinas)
@@ -23,181 +27,97 @@ class DisciplinaController:
         self.disciplinas_bp.route("/<int:id>", methods=["PUT"])(self.update_disciplina)
 
     def get_disciplinas(self):
-        try:
-            response = supabase.table("disciplinas").select("*").execute()
-            return jsonify(response.data)
-        except Exception as err:
-            print(err)
-            return jsonify({"error": "Erro ao puxar os dados"})
+        disciplinas = self.disciplinaService.findDisciplinas()
+        disciplinas_dict = [disciplina.to_dict() for disciplina in disciplinas]
+        return jsonify(disciplinas_dict),200
 
-
-    def get_disciplinas_by_area(area_relacionada):
-        try:
-
-            # Busca as disciplinas no Supabase com base na área relacionada
-            response = supabase.table("disciplinas").select("*").eq("area_relacionada", area_relacionada).execute()
-
-            # Verifica se há registros
-            if not response.data:
-                return jsonify({"error": "Registro não encontrado"}), 404
-
-            return jsonify(response.data), 200
-        except Exception as err:
-            print(err)
-            return jsonify({"error": "Erro ao puxar os dados"}), 500
+    def get_disciplinas_by_area(self, area_relacionada):
+        """
+        disciplinas = self.disciplinaService.findDisciplinasByArea(area_relacionada)
+        disciplinas_dict = [disciplina.to_dict() for disciplina in disciplinas]
+        return jsonify(disciplinas_dict), 200
+        """
 
     def get_disciplinas_pagination(self):
-        try:
-            data = request.json
-            limit = data.get("limit", 10)  # Limite padrão de 10 registros
-            page = data.get("page", 1)  # Página padrão é a 1ª
+        limit = request.args.get("limit", 10, type=int)
+        page = request.args.get("page", 1, type=int)
 
-            # Calcula o intervalo de registros
-            start = (page - 1) * limit
-            end = start + limit - 1
+        disciplinas, total_disciplinas = self.disciplinaService.findDisciplinasPaginated(limit, page)
+        disciplinas_dict = [disciplina.to_dict() for disciplina in disciplinas]
 
-            # Busca os registros no Supabase
-            response = supabase.table("disciplinas").select("*").range(start, end).execute()
-
-            # Verifica se há registros
-            if not response.data:
-                return jsonify({"error": "Nenhum registro encontrado"}), 404
-
-            return jsonify(response.data), 200
-        except Exception as err:
-            print(err)
-            return jsonify({"error": "Erro ao puxar os dados"}), 500
+        return jsonify({
+            "disciplinas": disciplinas_dict,
+            "total_disciplinas": total_disciplinas,
+            "actual_page": page,
+            "limit_per_page": limit
+        }), 200
 
     def get_disciplinas_by_semestre(self, semestre):
-        try:
-            # Busca as disciplinas no Supabase com base no semestre
-            response = supabase.table("disciplinas").select("*").eq("semestre", semestre).execute()
-
-            # Verifica se há registros
-            if not response.data:
-                return jsonify({"error": "Nenhum registro encontrado"}), 404
-
-            return jsonify(response.data), 200
-        except Exception as err:
-            print(err)
-            return jsonify({"error": "Erro ao puxar os dados"}), 500
+        disciplinas = self.disciplinaService.findDisciplinasBySemestre(semestre)
+        disciplinas_dict = [disciplina.to_dict() for disciplina in disciplinas]
+        return jsonify(disciplinas_dict), 200
 
     def get_disciplina_by_id(self, id):
-        try:
-            # Busca a disciplina no Supabase com base no ID
-            response = supabase.table("disciplinas").select("*").eq("id_disciplina", id).execute()
-
-            # Verifica se o registro foi encontrado
-            if not response.data:
-                return jsonify({"error": "Registro não encontrado"}), 404
-
-            return jsonify(response.data[0]), 200
-        except Exception as err:
-            print(err)
-            return jsonify({"error": "Erro ao puxar os dados"}), 500
+        disciplina = self.disciplinaService.findDisciplinaById(id)
+        disciplina_dict = disciplina.to_dict()
+        return jsonify(disciplina_dict),200
 
     def get_disciplinas_by_professor_ra(self, ra):
-        try:
-            # Busca as disciplinas no Supabase com base no RA do professor
-            response = supabase.table("disciplinas").select("*").eq("ra_professor", ra).execute()
-
-            # Verifica se há registros
-            if not response.data:
-                return jsonify({"error": "Nenhum registro encontrado"}), 404
-
-            return jsonify(response.data), 200
-        except Exception as err:
-            print(err)
-            return jsonify({"error": "Erro ao puxar os dados"}), 500
+        disciplinas = self.disciplinaService.findDisciplinasByProfessorRa(ra)
+        disciplinas_dict = [disciplina.to_dict() for disciplina in disciplinas]
+        return jsonify(disciplinas_dict),200
 
     def add_disciplina(self):
         try:
             data = request.json
             nome = data.get("nome")
             descricao = data.get("descricao")
-            dificuldade = data.get("dificuldade")
             semestre = data.get("semestre")
+            dificuldade = data.get("dificuldade")
             ra_professor = data.get("ra_professor")
 
-            # Verifica se os campos obrigatórios foram fornecidos
-            if not nome or not dificuldade or not semestre or not ra_professor:
-                return jsonify({"error": "Campos obrigatórios não fornecidos"}), 400
+            if not nome or not descricao or not semestre or not dificuldade or not ra_professor:
+                raise BadRequestException("Campos obrigatórios não fornecidos")
 
-            # Insere o registro no Supabase
-            response = supabase.table("disciplinas").insert({
-                "nome": nome,
-                "descricao": descricao,
-                "dificuldade": dificuldade,
-                "semestre": semestre,
-                "ra_professor": ra_professor
-            }).execute()
+            disciplina = self.disciplinaService.addDisciplina(
+                Disciplina(nome, descricao, semestre, ra_professor, dificuldade)
+            )
 
-            # Verifica se a inserção foi bem-sucedida
-            if not response.data:
-                return jsonify({"error": "Erro ao inserir o registro"}), 400
+            disciplina_dict = disciplina.to_dict()
+            return jsonify(disciplina_dict), 200
 
-            return jsonify({"message": "Disciplina inserida com sucesso"}), 201
-        except Exception as err:
-            print(err)
-            return jsonify({"error": "Erro ao inserir a disciplina"}), 500
+        except Exception as e:
+            print("Erro ao adicionar disciplina:", e)
+            return jsonify({"message": "Erro interno do servidor"}), 500
 
     def add_disciplinas_from_csv(self):
-        try:
-            payload = request.json
-            csv_data = payload.get("data")
-            print("CSV Data:", csv_data)
+        payload = request.json
+        csv_data = payload.get("data")
 
-            if not csv_data:
-                return jsonify({"error": "Nenhum dado fornecido."}), 400
+        if not csv_data:
+            raise BadRequestException("Nenhum dado fornecido.")
 
-            disciplinas_formatadas = []
-            for linha in csv_data:
-                try:
-                    disciplina = {
-                        "nome": linha["nome"],
-                        "descricao": linha["descricao"],
-                        "dificuldade": float(linha["dificuldade"]),
-                        "semestre": int(linha["semestre"]),
-                        "ra_professor": int(linha["ra_professor"])
-                    }
-                    disciplinas_formatadas.append(disciplina)
-                except (KeyError, ValueError) as e:
-                    print(f"Erro ao processar linha: {linha}, erro: {e}")
-                    continue
+        disciplinas = self.disciplinaService.addDisciplinasFromCSV(csv_data)
+        disciplinas_dict = [disciplina.to_dict() for disciplina in disciplinas]
 
-            if not disciplinas_formatadas:
-                return jsonify({"error": "Nenhum registro válido para importar."}), 400
-
-            response = supabase.table("disciplinas").insert(disciplinas_formatadas).execute()
-
-            return jsonify({
-                "message": f"{len(disciplinas_formatadas)} disciplinas inseridos com sucesso.",
-                "data": response.data
-            }), 201
-
-        except Exception as err:
-            print("Erro ao importar disciplinas via CSV:", err)
-            return {"error": str(err)}, 500
+        return jsonify({
+            "message": f"{len(disciplinas_dict)} alunos inseridos com sucesso.",
+            "data": disciplinas_dict
+        }), 201
 
     def delete_disciplina(self, id):
-        try:
-            # Deleta a disciplina no Supabase com base no ID
-            response = supabase.table("disciplinas").delete().eq("id_disciplina", id).execute()
-
-            # Verifica se o registro foi encontrado e deletado
-            if not response.data:
-                return jsonify({"error": "Registro não encontrado"}), 404
-
-            return jsonify({"message": "Disciplina deletada com sucesso"}), 200
-        except Exception as err:
-            print(err)
-            return jsonify({"error": "Erro ao deletar a disciplina"}), 500
+        self.disciplinaService.deleteDisciplina(id)
+        return jsonify({"message": "Disciplina deletada com sucesso"}), 200
 
     def update_disciplina(self, id):
         try:
             data = request.json
+            id_disciplina = id
             nome = data.get("nome")
             descricao = data.get("descricao")
+            semestre = data.get("semestre")
+            dificuldade = data.get("dificuldade")
+            ra_professor = data.get("ra_professor")
             teor_programacao = data.get("teor_programacao")
             teor_matematica = data.get("teor_matematica")
             teor_testes = data.get("teor_testes")
@@ -207,35 +127,14 @@ class DisciplinaController:
             teor_requisitos = data.get("teor_requisitos")
             teor_ux = data.get("teor_ux")
             teor_gestao = data.get("teor_gestao")
-            semestre = data.get("semestre")
-            ra_professor = data.get("ra_professor")
 
-            # Verifica se os campos obrigatórios foram fornecidos
-            if not nome or not teor_programacao or not teor_matematica or not teor_testes or not teor_banco_dados or not teor_frontend or not teor_backend or not teor_requisitos or not teor_ux or not teor_gestao or not semestre or not ra_professor:
-                return jsonify({"error": "Campos obrigatórios não fornecidos"}), 400
-
-            # Atualiza o registro no Supabase
-            response = supabase.table("disciplinas").update({
-                "nome": nome,
-                "descricao": descricao,
-                "teor_programacao": teor_programacao,
-                "teor_matematica": teor_matematica,
-                "teor_testes": teor_testes,
-                "teor_banco_dados": teor_banco_dados,
-                "teor_frontend": teor_frontend,
-                "teor_backend": teor_backend,
-                "teor_requisitos": teor_requisitos,
-                "teor_ux": teor_ux,
-                "teor_gestao": teor_gestao,
-                "semestre": semestre,
-                "ra_professor": ra_professor
-            }).eq("id_disciplina", id).execute()
-
-            # Verifica se o registro foi encontrado e atualizado
-            if not response.data:
-                return jsonify({"error": "Registro não encontrado"}), 404
-
+            if not nome or not descricao or not semestre or not ra_professor or not dificuldade:
+                raise BadRequestException("Campos obrigatórios não fornecidos")
+            
+            self.disciplinaService.updateDisciplina(Disciplina(nome, descricao, semestre, ra_professor, dificuldade, id_disciplina))
+            
             return jsonify({"message": "Disciplina atualizada com sucesso"}), 200
-        except Exception as err:
-            print(err)
-            return jsonify({"error": "Erro ao atualizar a disciplina"}), 500
+        
+        except Exception as e:
+            print("Erro ao atualizar disciplina:", e)
+            return jsonify({"message": "Erro interno do servidor"}), 500
