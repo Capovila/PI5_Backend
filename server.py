@@ -1,19 +1,38 @@
 from flask import Flask
-from src.professores.professoresRoutes import professores_bp
-from src.turmas.turmasRoutes import turmas_bp
-from src.disciplinas.disciplinasRoutes import disciplinas_bp
-from src.alunos.alunosRoutes import alunos_bp
-from src.notas.notasRoutes import notas_bp
-from src.turmaDisciplina.turmaDisciplinaRoutes import turma_disciplina_bp
+from flask_cors import CORS
+
+from src.controllers.AlunoController import AlunoController
+from src.controllers.DisciplinaController import DisciplinaController
+from src.controllers.NotaController import NotaController
+from src.controllers.ProfessorController import ProfessorController
+from src.controllers.RegressaoLinearController import RegressaoLinearController
+from src.controllers.TurmaController import TurmaController
+from src.controllers.TurmaDisciplinaController import TurmaDisciplinaController
+from src.domain.exceptions.ExceptionHandler import ExceptionHandler
+
 import os
+
 os.environ["WERKZEUG_DEBUG_PIN"] = "off"
 app = Flask(__name__)
-app.register_blueprint(professores_bp)
-app.register_blueprint(turmas_bp)
-app.register_blueprint(disciplinas_bp)
-app.register_blueprint(alunos_bp)
-app.register_blueprint(notas_bp)
-app.register_blueprint(turma_disciplina_bp)
+CORS(app)
+
+alunoController = AlunoController()
+disciplinaController = DisciplinaController()
+regressaoLinearController = RegressaoLinearController()
+notaController = NotaController()
+professorController = ProfessorController()
+turmaController = TurmaController()
+turmaDisciplinaController = TurmaDisciplinaController()
+
+app.register_blueprint(alunoController.alunos_bp)
+app.register_blueprint(disciplinaController.disciplinas_bp)
+app.register_blueprint(regressaoLinearController.regressao_linear_bp)
+app.register_blueprint(notaController.notas_bp)
+app.register_blueprint(professorController.professores_bp)
+app.register_blueprint(turmaController.turmas_bp)
+app.register_blueprint(turmaDisciplinaController.turma_disciplina_bp)
+
+exceptionHandler = ExceptionHandler(app)
 
 @app.route("/", methods=["GET"])
 def home():
