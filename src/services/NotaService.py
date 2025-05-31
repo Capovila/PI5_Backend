@@ -31,6 +31,12 @@ class NotaService:
             raise ResourceNotFoundException(f"Notas não encontradas.")
         return notas
     
+    def findNotasByAlunoIdAndDisciplinaId(self, ra_aluno: int, id_disciplina: int) -> list[Nota]:
+        notas = self.notaRepository.findNotasByAlunoIdAndDisciplinaId(ra_aluno, id_disciplina)
+        if not notas:
+            raise ResourceNotFoundException(f"Notas não encontradas para o aluno {ra_aluno} na disciplina {id_disciplina}.")
+        return notas
+    
     def findNotasByDisciplinaId(self, id_disciplina: int) -> list[Nota]:
         notas = self.notaRepository.findNotasByDisciplinaId(id_disciplina)
         if not notas:

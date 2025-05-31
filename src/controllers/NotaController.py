@@ -20,6 +20,7 @@ class NotaController:
         self.notas_bp.route("/<int:id>", methods=["GET"])(self.get_nota_by_id)
         self.notas_bp.route("/aluno/<int:id>", methods=["GET"])(self.get_notas_by_aluno_id)
         self.notas_bp.route("/disciplina/<int:id>", methods=["GET"])(self.get_notas_by_disciplina_id)
+        self.notas_bp.route("/aluno/<int:idAluno>/disciplina/<int:idDisciplina>", methods=["GET"])(self.get_notas_by_aluno_id_and_disciplina_id)
         self.notas_bp.route("/", methods=["POST"])(self.add_nota)
         self.notas_bp.route("/importar_csv", methods=["POST"])(self.add_notas_from_csv)
         self.notas_bp.route("/<int:id>", methods=["DELETE"])(self.delete_nota)
@@ -56,6 +57,11 @@ class NotaController:
 
     def get_notas_by_disciplina_id(self, id):
         notas = self.notaService.findNotasByDisciplinaId(id)
+        notas_dict = [nota.to_dict() for nota in notas]
+        return jsonify(notas_dict), 200
+    
+    def get_notas_by_aluno_id_and_disciplina_id(self, idAluno, idDisciplina):
+        notas = self.notaService.findNotasByAlunoIdAndDisciplinaId(idAluno, idDisciplina)
         notas_dict = [nota.to_dict() for nota in notas]
         return jsonify(notas_dict), 200
 

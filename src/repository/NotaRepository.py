@@ -87,6 +87,23 @@ class NotaRepository:
             return notas
         return []
     
+    def findNotasByAlunoIdAndDisciplinaId(self, id_aluno: int, id_disciplina: int) -> list[Nota]:
+        response = supabase.table("notas").select("*").eq("ra_aluno", id_aluno).eq("id_disciplina", id_disciplina).execute()
+        if response and response.data:
+            data = response.data
+            print(data)
+            notas = [
+                Nota(
+                    id_notas=notas_dict["id_notas"],
+                    ra_aluno=notas_dict["ra_aluno"],
+                    id_disciplina=notas_dict["id_disciplina"],
+                    nota=notas_dict["nota"]
+                )
+                for notas_dict in data
+            ]
+            return notas
+        return []
+    
     def saveNota(self, nota: Nota) -> Nota|None:
         response = supabase.table("notas").insert({
             "ra_aluno":nota.ra_aluno,

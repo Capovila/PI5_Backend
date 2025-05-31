@@ -41,7 +41,7 @@ class TurmaDisciplinaRepository:
         return None
     
     def findTurmaDisciplinasByTurma(self, id_turma: str) -> list[TurmaDisciplina]:
-        response = supabase.table("turma_disciplina").select("*").eq("id_turma", id_turma).execute()
+        response = supabase.table("turma_disciplina").select("*, disciplinas(id_disciplina, nome, semestre, ra_professor)").eq("id_turma", id_turma).execute()
         if response and response.data:
             data = response.data
             turmaDisciplina = [
@@ -50,7 +50,8 @@ class TurmaDisciplinaRepository:
                     id_turma= turmaDisciplinas_dict["id_turma"],
                     id_disciplina= turmaDisciplinas_dict["id_disciplina"],
                     taxa_aprovacao= turmaDisciplinas_dict["taxa_aprovacao"],
-                    is_concluida= turmaDisciplinas_dict["is_concluida"]
+                    is_concluida= turmaDisciplinas_dict["is_concluida"],
+                    disciplinas = turmaDisciplinas_dict["disciplinas"]
                 )
                 for turmaDisciplinas_dict in data
             ]
@@ -79,7 +80,7 @@ class TurmaDisciplinaRepository:
         if result and result.data:
             ra_professor = result.data[0]["ra_professor"]
             response = supabase.table("turma_disciplina").select(
-                    "id_turma_disciplina, id_turma, id_disciplina, taxa_aprovacao, is_concluida, disciplinas(id_disciplina, nome, descricao, semestre, area_relacionada, ra_professor)"
+                    "id_turma_disciplina, id_turma, id_disciplina, taxa_aprovacao, is_concluida, disciplinas(id_disciplina, nome, descricao, semestre, dificuldade, ra_professor)"
                 ).execute()
             if response and response.data:
                 data = response.data
