@@ -12,3 +12,10 @@ class Nota:
             "id_disciplina": self.id_disciplina,
             "nota": self.nota
         }
+    
+    def to_database_payload(self):
+        return {
+            "ra_aluno": self.ra_aluno,
+            "id_disciplina": self.id_disciplina,
+            "nota": self.nota
+        }

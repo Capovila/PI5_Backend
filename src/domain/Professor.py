@@ -16,3 +16,14 @@ class Professor:
             "is_admin": self.is_admin,
             "is_liberado": self.is_liberado
         }
+    
+    def to_database_payload(self):
+        return {
+            "nome": self.nome,
+            "email": self.email,
+            "senha": self.senha,
+            "is_admin": self.is_admin,
+            "is_liberado": self.is_liberado
+        }
+    
+    

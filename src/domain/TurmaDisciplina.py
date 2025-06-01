@@ -13,6 +13,13 @@ class TurmaDisciplina:
             "id_turma": self.id_turma,
             "id_disciplina": self.id_disciplina,
             "taxa_aprovacao": self.taxa_aprovacao,
-            "is_concluida": self.is_concluida,
-            "disciplinas": self.disciplinas
+            "is_concluida": self.is_concluida
+        }
+    
+    def to_database_payload(self):
+        return {
+            "id_turma": self.id_turma,
+            "id_disciplina": self.id_disciplina,
+            "taxa_aprovacao": self.taxa_aprovacao,
+            "is_concluida": self.is_concluida
         }

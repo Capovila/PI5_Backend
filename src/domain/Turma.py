@@ -10,3 +10,9 @@ class Turma:
             "data_inicio": self.data_inicio,
             "isgraduated": self.isgraduated
         }
+    
+    def to_database_payload(self):
+        return {
+            "data_inicio": self.data_inicio,
+            "isgraduated": self.isgraduated
+        }

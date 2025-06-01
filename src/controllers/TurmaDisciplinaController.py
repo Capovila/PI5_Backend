@@ -78,7 +78,7 @@ class TurmaDisciplinaController:
         id_turma = data.get("id_turma")
         id_disciplina = data.get("id_disciplina")
         taxa_aprovacao = data.get("taxa_aprovacao")
-        is_concluida = data.get("nois_concluidata")
+        is_concluida = data.get("is_concluida")
 
         if not id_turma or not id_disciplina or not taxa_aprovacao or is_concluida is None:
             raise BadRequestException("Campos obrigatórios não fornecidos")
@@ -98,7 +98,7 @@ class TurmaDisciplinaController:
         turmaDisciplinas_dict = [turmaDisciplina.to_dict() for turmaDisciplina in turmaDisciplinas]
 
         return jsonify({
-            "message": f"{len(turmaDisciplinas_dict)} alunos inseridos com sucesso.",
+            "message": f"{len(turmaDisciplinas_dict)} turmaDisciplina inseridos com sucesso.",
             "data": turmaDisciplinas_dict
         }), 201
 
@@ -112,7 +112,7 @@ class TurmaDisciplinaController:
         id_turma = data.get("id_turma")
         id_disciplina = data.get("id_disciplina")
         taxa_aprovacao = data.get("taxa_aprovacao")
-        is_concluida = data.get("nois_concluidata")
+        is_concluida = data.get("is_concluida")
 
         if not id_turma or not id_disciplina or not taxa_aprovacao or is_concluida is None:
             raise BadRequestException("Campos obrigatórios não fornecidos")

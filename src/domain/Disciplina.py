@@ -16,3 +16,12 @@ class Disciplina:
             "ra_professor": self.ra_professor,
             "dificuldade": self.dificuldade
         }
+    
+    def to_database_payload(self):
+        return {
+            "nome": self.nome,
+            "descricao": self.descricao,
+            "semestre": self.semestre,
+            "ra_professor": self.ra_professor,
+            "dificuldade": self.dificuldade
+        }

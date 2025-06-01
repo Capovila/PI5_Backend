@@ -10,3 +10,9 @@ class Aluno:
             "nome": self.nome,
             "id_turma": self.id_turma,
         }
+    
+    def to_database_payload(self):
+        return {
+            "nome": self.nome,
+            "id_turma": self.id_turma,
+        }

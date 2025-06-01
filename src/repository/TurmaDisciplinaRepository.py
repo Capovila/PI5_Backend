@@ -1,3 +1,4 @@
+import traceback
 from src.domain.TurmaDisciplina import TurmaDisciplina
 from src.infrastructure.supabase_client import supabase
 
@@ -111,23 +112,54 @@ class TurmaDisciplinaRepository:
         return None
     
     def saveTurmaDisciplinasFromCSV(self, turmaDisciplinas: list[TurmaDisciplina]) -> list[TurmaDisciplina]:
-        turmaDisciplinas_dict = [turmaDisciplina.to_dict() for turmaDisciplina in turmaDisciplinas]
+        # 1. Preparar o payload
+        # Certifique-se que turmaDisciplina.to_database_payload() existe e está correto
+        try:
+            turmaDisciplinas_payload_list = [td.to_database_payload() for td in turmaDisciplinas]
+        except Exception as e:
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print("!!! ERRO AO PREPARAR O PAYLOAD (to_database_payload) !!!")
+            print(f"Tipo do Erro: {type(e)}")
+            print(f"Mensagem do Erro: {str(e)}")
+            print(f"Traceback Completo:\n{traceback.format_exc()}")
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            raise # Re-levanta a exceção
 
-        response = supabase.table("turma_disciplina").insert(turmaDisciplinas_dict).execute()
+        print(f"Turma_Disciplinas a serem inseridas (objetos): {turmaDisciplinas}")
+        print(f"PAYLOAD EXATO SENDO ENVIADO PARA O SUPABASE: {turmaDisciplinas_payload_list}")
 
-        if response.data:
+        # 2. Tentar a inserção no banco de dados
+        try:
+            response = supabase.table("turma_disciplina").insert(turmaDisciplinas_payload_list).execute()
+            print(f"Resposta do Supabase: {response}")
+        except Exception as e: # Captura QUALQUER exceção durante a chamada ao Supabase
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print(f"!!! ERRO DURANTE A INSERÇÃO NO SUPABASE (importar_csv) !!!")
+            print(f"Tipo do Erro: {type(e)}")
+            print(f"Mensagem do Erro: {str(e)}")
+            print(f"Payload que foi enviado: {turmaDisciplinas_payload_list}") # Log do payload que falhou
+            print(f"Traceback Completo:\n{traceback.format_exc()}") # ESSA LINHA É CRUCIAL
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            raise # Re-levanta a exceção para que o servidor ainda retorne 500
+
+        # 3. Processar a resposta (só executa se não houve exceção)
+        if response and response.data:
             data = response.data
-            turmaDisciplinas = [
-                TurmaDisciplina(
-                    id_turma_disciplina= turmaDisciplinas_dict["id_turma_disciplina"],
-                    id_turma= turmaDisciplinas_dict["id_turma"],
-                    id_disciplina= turmaDisciplinas_dict["id_disciplina"],
-                    taxa_aprovacao= turmaDisciplinas_dict["taxa_aprovacao"],
-                    is_concluida= turmaDisciplinas_dict["is_concluida"]
+            turmasDisciplinas_criadas = []
+            for td_data in data:
+                turmasDisciplinas_criadas.append(
+                    TurmaDisciplina(
+                        id_turma_disciplina=td_data.get("id_turma_disciplina"),
+                        id_turma=td_data["id_turma"],
+                        id_disciplina=td_data["id_disciplina"],
+                        taxa_aprovacao=td_data.get("taxa_aprovacao"),
+                        is_concluida=td_data["is_concluida"]
+                    )
                 )
-                for turmaDisciplinas_dict in data
-            ]
-            return turmaDisciplinas
+            print(f"Turma_Disciplinas inseridas com sucesso (objetos retornados): {turmasDisciplinas_criadas}")
+            return turmasDisciplinas_criadas
+        
+        print("Nenhum dado retornado do Supabase após a inserção, ou a resposta não continha dados.")
         return []
     
     def deleteTurmaDisciplina(self, id_turma_disciplina: int) -> TurmaDisciplina|None:

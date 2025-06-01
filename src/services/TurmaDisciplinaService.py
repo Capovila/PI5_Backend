@@ -45,11 +45,14 @@ class TurmaDisciplinaService:
         turmaDisciplinas_formatadas: list[TurmaDisciplina] = []
         for linha in csv_data:
             try:
+                is_concluida_str = linha.get("is_concluida", "false").strip().lower() # Default to "false" if missing
+                is_concluida_val = is_concluida_str == 'true'
+                print(f"Processando linha: {linha}, is_concluida: {is_concluida_val}")
                 turmaDisciplina = TurmaDisciplina(
                     id_turma= int(linha["id_turma"]),
                     id_disciplina= int(linha["id_disciplina"]),
-                    taxa_aprovacao= float(linha["taxa_aprovacao"]),
-                    is_concluida= bool(linha["is_concluida"])
+                    taxa_aprovacao= int(linha["taxa_aprovacao"]),
+                    is_concluida=is_concluida_val
                 )
                 turmaDisciplinas_formatadas.append(turmaDisciplina)
             except (KeyError, ValueError) as e:
@@ -58,7 +61,7 @@ class TurmaDisciplinaService:
 
         if not turmaDisciplinas_formatadas:
             raise BadRequestException("Nenhum registro válido para importar.")
-
+        
         turmaDisciplina = self.turmaDisciplinaRepository.saveTurmaDisciplinasFromCSV(turmaDisciplinas_formatadas)
 
         if not turmaDisciplina:
