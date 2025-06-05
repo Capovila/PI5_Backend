@@ -8,7 +8,12 @@ class SupabaseClientSingleton:
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = create_client(SUPABASE_URL, SUPABASE_KEY)
+            cls._instance = super().__new__(cls)
+            cls._instance.client = create_client(SUPABASE_URL, SUPABASE_KEY)
         return cls._instance
 
-supabase = SupabaseClientSingleton()
+    def get_client(self):
+        return self.client
+
+supabase_singleton = SupabaseClientSingleton()
+supabase = supabase_singleton.get_client()
