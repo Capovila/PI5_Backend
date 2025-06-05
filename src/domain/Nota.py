@@ -4,7 +4,7 @@ class Nota:
         self.ra_aluno: int = ra_aluno
         self.id_disciplina: int = id_disciplina
         self.nota: int = nota
-
+        
     def to_dict(self):
         return {
             "id_notas": self.id_notas,

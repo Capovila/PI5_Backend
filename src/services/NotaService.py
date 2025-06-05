@@ -1,3 +1,4 @@
+from factories.NotaFromDictFactory import NotaFromDictFactory
 from src.domain.Nota import Nota
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException
@@ -7,6 +8,7 @@ from src.repository.NotaRepository import NotaRepository
 class NotaService:
     def __init__(self):
         self.notaRepository: NotaRepository = NotaRepository()
+        self.notaFactory = NotaFromDictFactory()
 
     def findNotas(self) -> list[Nota]:
         return self.notaRepository.findNotas()
@@ -53,11 +55,7 @@ class NotaService:
         notas_formatadas:list[Nota] = []
         for linha in csv_data:
             try:
-                nota = Nota(
-                    ra_aluno=int(linha["ra_aluno"]),
-                    id_disciplina=int(linha["id_disciplina"]),
-                    nota=int(linha["nota"])
-                )
+                nota = self.notaFactory.createNota(linha)
                 notas_formatadas.append(nota)
             except (KeyError, ValueError) as e:
                 print(f"Erro ao processar linha: {linha}, erro: {e}")

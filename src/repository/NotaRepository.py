@@ -1,20 +1,16 @@
+from src.factories.NotaFromDictFactory import NotaFromDictFactory
 from src.domain.Nota import Nota
 from src.infrastructure.supabase_client import supabase
 
 class NotaRepository:
+    def __init__(self):
+        self.notaFactory = NotaFromDictFactory()
+        
     def findNotas(self) -> list[Nota]:
         response = supabase.table("notas").select("*").execute()
         if response and response.data:
             data = response.data
-            notas = [
-                Nota(
-                    id_notas=notas_dict["id_notas"],
-                    ra_aluno=notas_dict["ra_aluno"],
-                    id_disciplina=notas_dict["id_disciplina"],
-                    nota=notas_dict["nota"]
-                )
-                for notas_dict in data
-            ]
+            notas = [self.notaFactory.createNota(notas_dict) for notas_dict in data]
             return notas
         return []
     
@@ -29,15 +25,7 @@ class NotaRepository:
 
         if response and response.data:
             data = response.data
-            notas = [
-                Nota(
-                    id_notas=notas_dict["id_notas"],
-                    ra_aluno=notas_dict["ra_aluno"],
-                    id_disciplina=notas_dict["id_disciplina"],
-                    nota=notas_dict["nota"]
-                )
-                for notas_dict in data
-            ]
+            notas = [self.notaFactory.createNota(notas_dict) for notas_dict in data]
             total_notas = response.count
 
         return notas, total_notas
@@ -46,12 +34,7 @@ class NotaRepository:
         response = supabase.table("notas").select("*").eq("id_notas", id).execute()
         if len(response.data) > 0:
             data = response.data[0]
-            nota = Nota(
-                id_notas=data["id_notas"],
-                ra_aluno=data["ra_aluno"],
-                id_disciplina=data["id_disciplina"],
-                nota=data["nota"]
-            )
+            nota = self.notaFactory.createNota(data)
             return nota
         return None
     
@@ -59,15 +42,7 @@ class NotaRepository:
         response = supabase.table("notas").select("*").eq("ra_aluno", ra_aluno).execute()
         if response and response.data:
             data = response.data
-            notas = [
-                Nota(
-                    id_notas=notas_dict["id_notas"],
-                    ra_aluno=notas_dict["ra_aluno"],
-                    id_disciplina=notas_dict["id_disciplina"],
-                    nota=notas_dict["nota"]
-                )
-                for notas_dict in data
-            ]
+            notas = [self.notaFactory.createNota(notas_dict) for notas_dict in data]
             return notas
         return []
     
@@ -75,15 +50,7 @@ class NotaRepository:
         response = supabase.table("notas").select("*").eq("id_disciplina", id_disciplina).execute()
         if response and response.data:
             data = response.data
-            notas = [
-                Nota(
-                    id_notas=notas_dict["id_notas"],
-                    ra_aluno=notas_dict["ra_aluno"],
-                    id_disciplina=notas_dict["id_disciplina"],
-                    nota=notas_dict["nota"]
-                )
-                for notas_dict in data
-            ]
+            notas = [self.notaFactory.createNota(notas_dict) for notas_dict in data]
             return notas
         return []
     
@@ -91,16 +58,7 @@ class NotaRepository:
         response = supabase.table("notas").select("*").eq("ra_aluno", id_aluno).eq("id_disciplina", id_disciplina).execute()
         if response and response.data:
             data = response.data
-            print(data)
-            notas = [
-                Nota(
-                    id_notas=notas_dict["id_notas"],
-                    ra_aluno=notas_dict["ra_aluno"],
-                    id_disciplina=notas_dict["id_disciplina"],
-                    nota=notas_dict["nota"]
-                )
-                for notas_dict in data
-            ]
+            notas = [self.notaFactory.createNota(notas_dict) for notas_dict in data]
             return notas
         return []
     
@@ -113,12 +71,8 @@ class NotaRepository:
         
         if response.data:
             data = response.data[0]
-            return Nota(
-                id_notas=data["id_notas"],
-                ra_aluno=data["ra_aluno"],
-                id_disciplina=data["id_disciplina"],
-                nota=data["nota"]
-            )
+            nota = self.notaFactory.createNota(data)
+            return nota
         return None
     
     def saveNotasFromCSV(self, notas: list[Nota]) -> list[Nota]:
@@ -128,14 +82,7 @@ class NotaRepository:
 
         if response.data:
             data = response.data
-            notas = [
-                Nota(
-                    ra_aluno=notas_dict["ra_aluno"],
-                    id_disciplina=notas_dict["id_disciplina"],
-                    nota=notas_dict["nota"]
-                )
-                for notas_dict in data
-            ]
+            notas = [self.notaFactory.createNota(notas_dict) for notas_dict in data]
             return notas
         return []
     
@@ -144,12 +91,7 @@ class NotaRepository:
 
         if response.data:
             data = response.data[0]
-            nota = Nota(
-                id_notas=data["id_notas"],
-                ra_aluno=data["ra_aluno"],
-                id_disciplina=data["id_disciplina"],
-                nota=data["nota"]
-            )
+            nota = self.notaFactory.createNota(data)
             return nota
         return None
     
@@ -162,11 +104,6 @@ class NotaRepository:
         
         if response.data:
             data = response.data[0]
-            nota = Nota(
-                id_notas=data["id_notas"],
-                ra_aluno=data["ra_aluno"],
-                id_disciplina=data["id_disciplina"],
-                nota=data["nota"]
-            )
+            nota = self.notaFactory.createNota(data)
             return nota
         return None
