@@ -1,4 +1,4 @@
-from src.factories.NotaFactory import NotaFactory
+from src.factories.Nota.NotaFactory import NotaFactory
 from src.domain.Nota import Nota
 from src.infrastructure.supabase_client import supabase
 

@@ -1,4 +1,4 @@
-from src.factories.AlunoFactory import AlunoFactory
+from src.factories.Aluno.AlunoFactory import AlunoFactory
 from src.domain.Aluno import Aluno
 from src.infrastructure.supabase_client import supabase
 

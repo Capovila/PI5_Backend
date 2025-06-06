@@ -1,5 +1,5 @@
-from src.factories.AlunoFactory import AlunoFactory
-from src.factories.AlunoFromDictFactory import AlunoFromDictFactory
+from src.factories.Aluno.AlunoFactory import AlunoFactory
+from src.factories.Aluno.AlunoFromDictFactory import AlunoFromDictFactory
 from src.domain.Aluno import Aluno
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException

@@ -1,5 +1,5 @@
-from src.factories.NotaFromDictFactory import NotaFromDictFactory
-from src.factories.NotaFactory import NotaFactory
+from src.factories.Nota.NotaFromDictFactory import NotaFromDictFactory
+from src.factories.Nota.NotaFactory import NotaFactory
 from src.domain.Nota import Nota
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException

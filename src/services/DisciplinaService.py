@@ -1,12 +1,14 @@
 from src.domain.Disciplina import Disciplina
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException
+from src.factories.Disciplina.DisciplinaFactory import DisciplinaFactory
+from src.factories.Disciplina.DisciplinaFromDictFactory import DisciplinaFromDictFactory
 from src.repository.DisciplinaRepository import DisciplinaRepository
-
 
 class DisciplinaService:
     def __init__(self):
-        self.disciplinaRepository: DisciplinaRepository = DisciplinaRepository()
+        self.disciplinaFactory: DisciplinaFactory = DisciplinaFromDictFactory()
+        self.disciplinaRepository: DisciplinaRepository = DisciplinaRepository(self.disciplinaFactory)
 
     def findDisciplinas(self) -> list[Disciplina]:
         return self.disciplinaRepository.findDisciplinas()
@@ -55,13 +57,7 @@ class DisciplinaService:
         disciplinas_formatadas: list[Disciplina] = []
         for linha in csv_data:
             try:
-                disciplina = Disciplina(
-                    nome=linha["nome"],
-                    descricao=linha["descricao"],
-                    semestre=int(linha["semestre"]), 
-                    ra_professor=int(linha["ra_professor"]),
-                    dificuldade=int(linha["dificuldade"])
-                )
+                disciplina = self.disciplinaFactory.createDisciplina(linha)
                 disciplinas_formatadas.append(disciplina)
             except (KeyError, ValueError) as e:
                 print(f"Erro ao processar linha: {linha}, erro: {e}")
