@@ -1,10 +1,10 @@
-from src.factories.NotaFromDictFactory import NotaFromDictFactory
+from src.factories.NotaFactory import NotaFactory
 from src.domain.Nota import Nota
 from src.infrastructure.supabase_client import supabase
 
 class NotaRepository:
-    def __init__(self):
-        self.notaFactory = NotaFromDictFactory()
+    def __init__(self, notaFactory: NotaFactory):
+        self.notaFactory = notaFactory
         
     def findNotas(self) -> list[Nota]:
         response = supabase.table("notas").select("*").execute()

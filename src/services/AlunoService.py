@@ -1,12 +1,14 @@
+from src.factories.AlunoFactory import AlunoFactory
+from src.factories.AlunoFromDictFactory import AlunoFromDictFactory
 from src.domain.Aluno import Aluno
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException
 from src.repository.AlunoRepository import AlunoRepository
 
-
 class AlunoService:
     def __init__(self):
-        self.alunoRepository: AlunoRepository = AlunoRepository()
+        self.alunoFactory: AlunoFactory = AlunoFromDictFactory()
+        self.alunoRepository: AlunoRepository = AlunoRepository(self.alunoFactory)
 
     def findAlunos(self) -> list[Aluno]:
         return self.alunoRepository.findAlunos()
@@ -41,11 +43,7 @@ class AlunoService:
         alunos_formatados:list[Aluno] = []
         for linha in csv_data:
             try:
-                aluno = Aluno(
-                    ra_aluno=int(linha["ra_aluno"]),
-                    nome=linha["nome"],
-                    id_turma=int(linha["id_turma"])
-                )
+                aluno = self.alunoFactory.createAluno(linha)
                 alunos_formatados.append(aluno)
             except (KeyError, ValueError) as e:
                 print(f"Erro ao processar linha: {linha}, erro: {e}")

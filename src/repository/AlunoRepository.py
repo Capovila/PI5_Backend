@@ -1,20 +1,16 @@
+from src.factories.AlunoFactory import AlunoFactory
 from src.domain.Aluno import Aluno
 from src.infrastructure.supabase_client import supabase
 
-
 class AlunoRepository:
+    def __init__(self, alunoFactory: AlunoFactory):
+        self.alunoFactory = alunoFactory
+        
     def findAlunos(self) -> list[Aluno]:
         response = supabase.table("alunos").select("*").execute()
         if response and response.data:
             data = response.data
-            alunos = [
-                Aluno(
-                    ra_aluno=alunos_dict["ra_aluno"],
-                    nome=alunos_dict["nome"],
-                    id_turma=alunos_dict["id_turma"],
-                )
-                for alunos_dict in data
-            ]
+            alunos = [self.alunoFactory.createAluno(alunos_dict) for alunos_dict in data]
             return alunos
         return []
 
@@ -22,11 +18,7 @@ class AlunoRepository:
         response = supabase.table("alunos").select("*").eq("ra_aluno", ra_aluno).execute()
         if len(response.data) > 0:
             data = response.data[0]
-            aluno = Aluno(
-                ra_aluno=data["ra_aluno"],
-                nome=data["nome"],
-                id_turma=data["id_turma"],
-            )
+            aluno = self.alunoFactory.createAluno(data)
             return aluno
         return None
 
@@ -41,14 +33,7 @@ class AlunoRepository:
 
         if response and response.data:
             data = response.data
-            alunos = [
-                Aluno(
-                    ra_aluno=alunos_dict["ra_aluno"],
-                    nome=alunos_dict["nome"],
-                    id_turma=alunos_dict["id_turma"],
-                )
-                for alunos_dict in data
-            ]
+            alunos = [self.alunoFactory.createAluno(alunos_dict) for alunos_dict in data]
             total_alunos = response.count
 
         return alunos, total_alunos
@@ -57,14 +42,7 @@ class AlunoRepository:
         response = supabase.table("alunos").select("*").eq("id_turma", id_turma).execute()
         if response and response.data:
             data = response.data
-            alunos = [
-                Aluno(
-                    ra_aluno=alunos_dict["ra_aluno"],
-                    nome=alunos_dict["nome"],
-                    id_turma=alunos_dict["id_turma"],
-                )
-                for alunos_dict in data
-            ]
+            alunos = [self.alunoFactory.createAluno(alunos_dict) for alunos_dict in data]
             return alunos
         return []
 
@@ -77,11 +55,8 @@ class AlunoRepository:
 
         if response.data:
             data = response.data[0]
-            return Aluno (
-                ra_aluno=data["ra_aluno"],
-                nome=data["nome"],
-                id_turma=data["id_turma"],
-            )
+            aluno = self.alunoFactory.createAluno(data)
+            return aluno
         return None
 
     def saveAlunosFromCSV(self, alunos: list[Aluno]) -> list[Aluno]:
@@ -91,14 +66,7 @@ class AlunoRepository:
 
         if response.data:
             data = response.data
-            alunos = [
-                Aluno(
-                    ra_aluno=alunos_dict["ra_aluno"],
-                    nome=alunos_dict["nome"],
-                    id_turma=alunos_dict["id_turma"],
-                )
-                for alunos_dict in data
-            ]
+            alunos = [self.alunoFactory.createAluno(alunos_dict) for alunos_dict in data]
             return alunos
         return []
 
@@ -107,11 +75,7 @@ class AlunoRepository:
 
         if response.data:
             data = response.data[0]
-            aluno = Aluno(
-                ra_aluno=data["ra_aluno"],
-                nome=data["nome"],
-                id_turma=data["id_turma"],
-            )
+            aluno = self.alunoFactory.createAluno(data)
             return aluno
         return None
 
@@ -123,10 +87,6 @@ class AlunoRepository:
 
         if response.data:
             data = response.data[0]
-            aluno = Aluno(
-                ra_aluno=data["ra_aluno"],
-                nome=data["nome"],
-                id_turma=data["id_turma"],
-            )
+            aluno = self.alunoFactory.createAluno(data)
             return aluno
         return None

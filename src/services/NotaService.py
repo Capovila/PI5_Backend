@@ -1,14 +1,14 @@
 from src.factories.NotaFromDictFactory import NotaFromDictFactory
+from src.factories.NotaFactory import NotaFactory
 from src.domain.Nota import Nota
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException
 from src.repository.NotaRepository import NotaRepository
 
-
 class NotaService:
     def __init__(self):
-        self.notaRepository: NotaRepository = NotaRepository()
-        self.notaFactory = NotaFromDictFactory()
+        self.notaFactory: NotaFactory = NotaFromDictFactory()
+        self.notaRepository: NotaRepository = NotaRepository(self.notaFactory)
 
     def findNotas(self) -> list[Nota]:
         return self.notaRepository.findNotas()
