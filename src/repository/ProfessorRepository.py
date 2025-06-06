@@ -1,23 +1,16 @@
 from src.domain.Professor import Professor
+from src.factories.Professor.ProfessorFactory import ProfessorFactory
 from src.infrastructure.supabase_client import supabase
 
-
 class ProfessorRepository:
+    def __init__(self, professorFactory: ProfessorFactory):
+        self.professorFactory = professorFactory
+    
     def findProfessores(self) -> list[Professor]:
         response = supabase.table("professores").select("*").execute()
         if response and response.data:
             data = response.data
-            professores = [
-                Professor(
-                    ra_professor= professores_dict["ra_professor"],
-                    nome= professores_dict["nome"],
-                    email= professores_dict["email"],
-                    senha= professores_dict["senha"],
-                    is_admin= professores_dict["is_admin"],
-                    is_liberado= professores_dict["is_liberado"]
-                )
-                for professores_dict in data
-            ]
+            professores = [self.professorFactory.createProfessor(professores_dict) for professores_dict in data]
             return professores
         return []
     
@@ -25,14 +18,7 @@ class ProfessorRepository:
         response = supabase.table("professores").select("*").eq("ra_professor", ra_professor).execute()
         if len(response.data) > 0:
             data = response.data[0]
-            professor = Professor(
-                    ra_professor= data["ra_professor"],
-                    nome= data["nome"],
-                    email= data["email"],
-                    senha= data["senha"],
-                    is_admin= data["is_admin"],
-                    is_liberado= data["is_liberado"]
-            )
+            professor = self.professorFactory.createProfessor(data)
             return professor
         return None
     
@@ -47,17 +33,7 @@ class ProfessorRepository:
 
         if response and response.data:
             data = response.data
-            professores = [
-                Professor(
-                    ra_professor= professores_dict["ra_professor"],
-                    nome= professores_dict["nome"],
-                    email= professores_dict["email"],
-                    senha= professores_dict["senha"],
-                    is_admin= professores_dict["is_admin"],
-                    is_liberado= professores_dict["is_liberado"]
-                )
-                for professores_dict in data
-            ]
+            professores = [self.professorFactory.createProfessor(professores_dict) for professores_dict in data]
             total_professores = response.count
 
         return professores, total_professores
@@ -74,14 +50,8 @@ class ProfessorRepository:
         
         if response.data:
             data = response.data[0]
-            return Professor(
-                ra_professor= data["ra_professor"],
-                nome= data["nome"],
-                email= data["email"],
-                senha= data["senha"],
-                is_admin= data["is_admin"],
-                is_liberado= data["is_liberado"]
-            )
+            professor = self.professorFactory.createProfessor(data)
+            return professor
         return None
     
     def saveProfessoresFromCSV(self, professores: list[Professor]) -> list[Professor]:
@@ -91,17 +61,7 @@ class ProfessorRepository:
 
         if response.data:
             data = response.data
-            professores = [
-                Professor(
-                    ra_professor= professores_dict["ra_professor"],
-                    nome= professores_dict["nome"],
-                    email= professores_dict["email"],
-                    senha= professores_dict["senha"],
-                    is_admin= professores_dict["is_admin"],
-                    is_liberado= professores_dict["is_liberado"]
-                )
-                for professores_dict in data
-            ]
+            professores = [self.professorFactory.createProfessor(professores_dict) for professores_dict in data]
             return professores
         return []
     
@@ -110,14 +70,7 @@ class ProfessorRepository:
 
         if response.data:
             data = response.data[0]
-            professor = Professor(
-                ra_professor= data["ra_professor"],
-                nome= data["nome"],
-                email= data["email"],
-                senha= data["senha"],
-                is_admin= data["is_admin"],
-                is_liberado= data["is_liberado"]
-            )
+            professor = self.professorFactory.createProfessor(data)
             return professor
         return None
     
@@ -132,14 +85,7 @@ class ProfessorRepository:
         
         if response.data:
             data = response.data[0]
-            professor = Professor(
-                ra_professor= data["ra_professor"],
-                nome= data["nome"],
-                email= data["email"],
-                senha= data["senha"],
-                is_admin= data["is_admin"],
-                is_liberado= data["is_liberado"]
-            )
+            professor = self.professorFactory.createProfessor(data)
             return professor
         return None
     
@@ -155,14 +101,7 @@ class ProfessorRepository:
         
         if response.data:
             data = response.data[0]
-            professor = Professor(
-                ra_professor= data["ra_professor"],
-                nome= data["nome"],
-                email= data["email"],
-                senha= data["senha"],
-                is_admin= data["is_admin"],
-                is_liberado= data["is_liberado"]
-            )
+            professor = self.professorFactory.createProfessor(data)
             return professor
         return None
     
@@ -173,13 +112,6 @@ class ProfessorRepository:
         
         if response.data:
             data = response.data[0]
-            professor = Professor(
-                ra_professor= data["ra_professor"],
-                nome= data["nome"],
-                email= data["email"],
-                senha= data["senha"],
-                is_admin= data["is_admin"],
-                is_liberado= data["is_liberado"]
-            )
+            professor = self.professorFactory.createProfessor(data)
             return professor
         return None

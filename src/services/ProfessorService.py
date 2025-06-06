@@ -1,12 +1,14 @@
 from src.domain.Professor import Professor
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException
+from src.factories.Professor.ProfessorFactory import ProfessorFactory
+from src.factories.Professor.ProfessorFromDictFactory import ProfessorFromDictFactory
 from src.repository.ProfessorRepository import ProfessorRepository
-
 
 class ProfessorService:
     def __init__(self):
-        self.professorRepository: ProfessorRepository = ProfessorRepository()
+        self.professorFactory: ProfessorFactory = ProfessorFromDictFactory()
+        self.professorRepository: ProfessorRepository = ProfessorRepository(self.professorFactory)
 
     def findProfessores(self) -> list[Professor]:
         return self.professorRepository.findProfessores()
@@ -35,14 +37,7 @@ class ProfessorService:
         professores_formatados: list[Professor] = []
         for linha in csv_data:
             try:
-                professor = Professor(
-                    ra_professor= int(linha["ra_professor"]),
-                    nome= linha["nome"],
-                    email= linha["email"],
-                    senha= linha["senha"],
-                    is_admin= bool(linha["is_admin"]),
-                    is_liberado= bool(linha["is_liberado"])
-                )
+                professor = self.professorFactory.createProfessor(linha)
                 professores_formatados.append(professor)
             except (KeyError, ValueError) as e:
                 print(f"Erro ao processar linha: {linha}, erro: {e}")

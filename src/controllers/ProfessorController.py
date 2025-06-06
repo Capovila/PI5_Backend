@@ -90,11 +90,11 @@ class ProfessorController:
             ra_professor = id
             nome = data.get("nome")
             email = data.get("email")
-            senha = data.get("senha")
+            senha = ""
             is_admin = data.get("is_admin")
             is_liberado = data.get("is_liberado")
 
-            if not nome or not email or not senha or is_admin is None or is_liberado is None:
+            if not nome or not email or is_admin is None or is_liberado is None:
                 raise BadRequestException("Campos obrigatórios não fornecidos")
             
             self.professorService.updateProfessor(Professor(ra_professor, nome, email, senha, is_admin, is_liberado))
