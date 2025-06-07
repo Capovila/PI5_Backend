@@ -1,12 +1,15 @@
 from src.domain.TurmaDisciplina import TurmaDisciplina
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException
+from src.factories.TurmaDisciplina.TurmaDisciplinaFromDictFactory import TurmaDisciplinaFromDictFactory
+from src.factories.TurmaDisciplina.TurmaDisciplinaFactory import TurmaDisciplinaFactory
 from src.repository.TurmaDisciplinaRepository import TurmaDisciplinaRepository
 
 
 class TurmaDisciplinaService:
     def __init__(self):
-        self.turmaDisciplinaRepository: TurmaDisciplinaRepository = TurmaDisciplinaRepository()
+        self.turmaDisciplinaFactory: TurmaDisciplinaFactory = TurmaDisciplinaFromDictFactory()
+        self.turmaDisciplinaRepository: TurmaDisciplinaRepository = TurmaDisciplinaRepository(self.turmaDisciplinaFactory)
 
     def findTurmaDisciplinas(self) -> list[TurmaDisciplina]:
         return self.turmaDisciplinaRepository.findTurmaDisciplinas()
