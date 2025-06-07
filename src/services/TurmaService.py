@@ -1,12 +1,15 @@
 from src.domain.Turma import Turma
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException
+from src.factories.Turma.TurmaFactory import TurmaFactory
+from src.factories.Turma.TurmaFromDictFactory import TurmaFromDictFactory
 from src.repository.TurmaRepository import TurmaRepository
 
 
 class TurmaService:
     def __init__(self):
-        self.turmaRepository: TurmaRepository = TurmaRepository()
+        self.turmaFactory: TurmaFactory = TurmaFromDictFactory()
+        self.turmaRepository: TurmaRepository = TurmaRepository(self.turmaFactory)
 
     def findTurmas(self) -> list[Turma]:
         return self.turmaRepository.findTurmas()

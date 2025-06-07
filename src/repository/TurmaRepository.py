@@ -1,20 +1,16 @@
 from src.domain.Turma import Turma
+from src.factories.Turma.TurmaFactory import TurmaFactory
 from src.infrastructure.supabase_client import supabase
 
-
 class TurmaRepository:
+    def __init__(self, turmaFactory: TurmaFactory):
+        self.turmaFactory = turmaFactory
+                
     def findTurmas(self) -> list[Turma]:
         response = supabase.table("turmas").select("*").execute()
         if response and response.data:
             data = response.data
-            turmas = [
-                Turma(
-                    id_turma= turmas_dict["id_turma"],
-                    data_inicio= turmas_dict["data_inicio"],
-                    isgraduated= turmas_dict["isgraduated"],
-                )
-                for turmas_dict in data
-            ]
+            turmas = [self.turmaFactory.createTurma(turmas_dict) for turmas_dict in data]
             return turmas
         return []
     
@@ -22,14 +18,7 @@ class TurmaRepository:
         response = supabase.table("turmas").select("*").eq("data_inicio", date).execute()
         if response and response.data:
             data = response.data
-            turmas = [
-                Turma(
-                    id_turma= turmas_dict["id_turma"],
-                    data_inicio= turmas_dict["data_inicio"],
-                    isgraduated= turmas_dict["isgraduated"],
-                )
-                for turmas_dict in data
-            ]
+            turmas = [self.turmaFactory.createTurma(turmas_dict) for turmas_dict in data]
             return turmas
         return []
     
@@ -44,14 +33,7 @@ class TurmaRepository:
 
         if response and response.data:
             data = response.data
-            turmas = [
-                Turma(
-                    id_turma= turmas_dict["id_turma"],
-                    data_inicio= turmas_dict["data_inicio"],
-                    isgraduated= turmas_dict["isgraduated"],
-                )
-                for turmas_dict in data
-            ]
+            turmas = [self.turmaFactory.createTurma(turmas_dict) for turmas_dict in data]
             total_turmas = response.count
 
         return turmas, total_turmas
@@ -60,11 +42,7 @@ class TurmaRepository:
         response = supabase.table("turmas").select("*").eq("id_turma", id_turma).execute()
         if len(response.data) > 0:
             data = response.data[0]
-            turma = Turma(
-                id_turma= data["id_turma"],
-                data_inicio= data["data_inicio"],
-                isgraduated= data["isgraduated"],
-            )
+            turma = self.turmaFactory.createTurma(data)
             return turma
         return None
     
@@ -76,11 +54,8 @@ class TurmaRepository:
         
         if response.data:
             data = response.data[0]
-            return Turma(
-                id_turma= data["id_turma"],
-                data_inicio= data["data_inicio"],
-                isgraduated= data["isgraduated"],
-            )
+            turma = self.turmaFactory.createTurma(data)
+            return turma
         return None
     
     def saveTurmasFromCSV(self, turmas: list[Turma]) -> list[Turma]:
@@ -90,13 +65,7 @@ class TurmaRepository:
 
         if response.data:
             data = response.data
-            turmas = [
-                Turma(
-                    data_inicio= turmas_dict["data_inicio"],
-                    isgraduated= turmas_dict["isgraduated"],
-                )
-                for turmas_dict in data
-            ]
+            turmas = [self.turmaFactory.createTurma(turmas_dict) for turmas_dict in data]
             return turmas
         return []
     
@@ -106,11 +75,7 @@ class TurmaRepository:
 
         if response.data:
             data = response.data[0]
-            turma = Turma(
-                id_turma= data["id_turma"],
-                data_inicio= data["data_inicio"],
-                isgraduated= data["isgraduated"],
-            )
+            turma = self.turmaFactory.createTurma(data)
             return turma
         return None
     
@@ -122,11 +87,7 @@ class TurmaRepository:
         
         if response.data:
             data = response.data[0]
-            turma = Turma(
-                id_turma= data["id_turma"],
-                data_inicio= data["data_inicio"],
-                isgraduated= data["isgraduated"],
-            )
+            turma = self.turmaFactory.createTurma(data)
             return turma
         return None
     
@@ -137,10 +98,6 @@ class TurmaRepository:
         
         if response.data:
             data = response.data[0]
-            turma = Turma(
-                id_turma= data["id_turma"],
-                data_inicio= data["data_inicio"],
-                isgraduated= data["isgraduated"],
-            )
+            turma = self.turmaFactory.createTurma(data)
             return turma
         return None
