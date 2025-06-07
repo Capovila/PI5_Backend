@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, request
 
 from src.domain.Turma import Turma
 from src.domain.exceptions.BadRequestException import BadRequestException
+from src.services.ITurmaService import ITurmaService
 from src.services.TurmaService import TurmaService
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
@@ -12,7 +13,7 @@ class TurmaController:
     def __init__(self):
         self.turmas_bp = Blueprint("turmas", __name__, url_prefix="/turmas")
         self._register_routes()
-        self.turmaService: TurmaService = TurmaService()
+        self.turmaService: ITurmaService = TurmaService()
 
     def _register_routes(self):
         self.turmas_bp.route("/", methods=["GET"])(self.get_turmas)

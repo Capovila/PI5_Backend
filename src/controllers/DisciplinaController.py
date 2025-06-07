@@ -5,6 +5,7 @@ from flask import Blueprint, jsonify, request
 from src.domain.Disciplina import Disciplina
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.services.DisciplinaService import DisciplinaService
+from src.services.IDisciplinaService import IDisciplinaService
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
@@ -12,7 +13,7 @@ class DisciplinaController:
     def __init__(self):
         self.disciplinas_bp = Blueprint("disciplinas", __name__, url_prefix="/disciplinas")
         self._register_routes()
-        self.disciplinaService: DisciplinaService = DisciplinaService()
+        self.disciplinaService: IDisciplinaService = DisciplinaService()
 
     def _register_routes(self):
         self.disciplinas_bp.route("/", methods=["GET"])(self.get_disciplinas)

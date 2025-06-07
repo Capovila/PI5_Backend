@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, request
 
 from src.domain.Nota import Nota
 from src.domain.exceptions.BadRequestException import BadRequestException
+from src.services.INotaService import INotaService
 from src.services.NotaService import NotaService
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
@@ -12,7 +13,7 @@ class NotaController:
     def __init__(self):
         self.notas_bp = Blueprint("notas", __name__, url_prefix="/notas")
         self._register_routes()
-        self.notaService: NotaService = NotaService()
+        self.notaService: INotaService = NotaService()
 
     def _register_routes(self):
         self.notas_bp.route("/", methods=["GET"])(self.get_notas)

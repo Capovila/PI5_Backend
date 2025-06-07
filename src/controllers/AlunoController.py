@@ -5,6 +5,7 @@ from flask import Blueprint, jsonify, request
 from src.domain.Aluno import Aluno
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.services.AlunoService import AlunoService
+from src.services.IAlunoService import IAlunoService
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
@@ -12,7 +13,7 @@ class AlunoController:
     def __init__(self):
         self.alunos_bp = Blueprint("alunos", __name__, url_prefix="/alunos")
         self._register_routes()
-        self.alunoService:AlunoService = AlunoService()
+        self.alunoService:IAlunoService = AlunoService()
 
     def _register_routes(self):
         self.alunos_bp.route("/", methods=["GET"])(self.get_alunos)
