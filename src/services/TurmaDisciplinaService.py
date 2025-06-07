@@ -5,10 +5,11 @@ from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundExce
 from src.factories.TurmaDisciplina.TurmaDisciplinaFromDictFactory import TurmaDisciplinaFromDictFactory
 from src.factories.TurmaDisciplina.TurmaDisciplinaFactory import TurmaDisciplinaFactory
 from src.repository.TurmaDisciplinaRepository import TurmaDisciplinaRepository
+from src.services.ITurmaDisciplinaService import ITurmaDisciplinaService
 from src.services.templates.TurmaDisciplinaCSVService import TurmaDisciplinaCSVService
 
 
-class TurmaDisciplinaService:
+class TurmaDisciplinaService(ITurmaDisciplinaService):
     def __init__(self):
         self.turmaDisciplinaFactory: TurmaDisciplinaFactory = TurmaDisciplinaFromDictFactory()
         self.turmaDisciplinaRepository: TurmaDisciplinaRepository = TurmaDisciplinaRepository(self.turmaDisciplinaFactory)

@@ -4,10 +4,11 @@ from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundExce
 from src.factories.Turma.TurmaFactory import TurmaFactory
 from src.factories.Turma.TurmaFromDictFactory import TurmaFromDictFactory
 from src.repository.TurmaRepository import TurmaRepository
+from src.services.ITurmaService import ITurmaService
 from src.services.templates.TurmaCSVService import TurmaCSVService
 
 
-class TurmaService:
+class TurmaService(ITurmaService):
     def __init__(self):
         self.turmaFactory: TurmaFactory = TurmaFromDictFactory()
         self.turmaRepository: TurmaRepository = TurmaRepository(self.turmaFactory)

@@ -4,9 +4,10 @@ from src.domain.Aluno import Aluno
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException
 from src.repository.AlunoRepository import AlunoRepository
+from src.services.IAlunoService import IAlunoService
 from src.services.templates.AlunoCSVService import AlunoCSVService
 
-class AlunoService:
+class AlunoService(IAlunoService):
     def __init__(self):
         self.alunoFactory: AlunoFactory = AlunoFromDictFactory()
         self.alunoRepository: AlunoRepository = AlunoRepository(self.alunoFactory)
@@ -41,7 +42,7 @@ class AlunoService:
             raise BadRequestException("Falha ao criar o usuário")
         return aluno
 
-    def addAlunoFromCSV(self, csv_data) -> list[Aluno]:
+    def addAlunosFromCSV(self, csv_data) -> list[Aluno]:
         if isinstance(csv_data, list) and len(csv_data) > 1 and isinstance(csv_data[0], list):
             headers = csv_data[0]
             rows = csv_data[1:]

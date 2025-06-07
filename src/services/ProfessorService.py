@@ -4,9 +4,10 @@ from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundExce
 from src.factories.Professor.ProfessorFactory import ProfessorFactory
 from src.factories.Professor.ProfessorFromDictFactory import ProfessorFromDictFactory
 from src.repository.ProfessorRepository import ProfessorRepository
+from src.services.IProfessorService import IProfessorService
 from src.services.templates.ProfessorCSVService import ProfessorCSVService
 
-class ProfessorService:
+class ProfessorService(IProfessorService):
     def __init__(self):
         self.professorFactory: ProfessorFactory = ProfessorFromDictFactory()
         self.professorRepository: ProfessorRepository = ProfessorRepository(self.professorFactory)

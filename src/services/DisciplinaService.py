@@ -4,9 +4,10 @@ from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundExce
 from src.factories.Disciplina.DisciplinaFactory import DisciplinaFactory
 from src.factories.Disciplina.DisciplinaFromDictFactory import DisciplinaFromDictFactory
 from src.repository.DisciplinaRepository import DisciplinaRepository
+from src.services.IDisciplinaService import IDisciplinaService
 from src.services.templates.DisciplinaCSVService import DisciplinaCSVService
 
-class DisciplinaService:
+class DisciplinaService(IDisciplinaService):
     def __init__(self):
         self.disciplinaFactory: DisciplinaFactory = DisciplinaFromDictFactory()
         self.disciplinaRepository: DisciplinaRepository = DisciplinaRepository(self.disciplinaFactory)

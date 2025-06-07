@@ -4,9 +4,10 @@ from src.domain.Nota import Nota
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException
 from src.repository.NotaRepository import NotaRepository
+from src.services.INotaService import INotaService
 from src.services.templates.NotaCSVService import NotaCSVService
 
-class NotaService:
+class NotaService(INotaService):
     def __init__(self):
         self.notaFactory: NotaFactory = NotaFromDictFactory()
         self.notaRepository: NotaRepository = NotaRepository(self.notaFactory)
