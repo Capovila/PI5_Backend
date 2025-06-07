@@ -76,7 +76,7 @@ class TurmaController:
 
         if not csv_data:
             raise BadRequestException("Nenhum dado fornecido.")
-
+        
         turmas = self.turmaService.addTurmasFromCSV(csv_data)
         turmas_dict = [turma.to_dict() for turma in turmas]
 

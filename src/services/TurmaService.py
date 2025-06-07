@@ -4,12 +4,14 @@ from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundExce
 from src.factories.Turma.TurmaFactory import TurmaFactory
 from src.factories.Turma.TurmaFromDictFactory import TurmaFromDictFactory
 from src.repository.TurmaRepository import TurmaRepository
+from src.services.templates.TurmaCSVService import TurmaCSVService
 
 
 class TurmaService:
     def __init__(self):
         self.turmaFactory: TurmaFactory = TurmaFromDictFactory()
         self.turmaRepository: TurmaRepository = TurmaRepository(self.turmaFactory)
+        self.turmaCSVService: TurmaCSVService = TurmaCSVService(self.turmaRepository)
 
     def findTurmas(self) -> list[Turma]:
         return self.turmaRepository.findTurmas()
@@ -41,27 +43,11 @@ class TurmaService:
         return turma
     
     def addTurmasFromCSV(self, csv_data) -> list[Turma]:
-        turmas_formatadas: list[Turma] = []
-        for linha in csv_data:
-            try:
-                turma = Turma(
-                    data_inicio= linha["data_inicio"],
-                    isgraduated= bool(linha["isgraduated"]),
-                )
-                turmas_formatadas.append(turma)
-            except (KeyError, ValueError) as e:
-                print(f"Erro ao processar linha: {linha}, erro: {e}")
-                continue
-
-        if not turmas_formatadas:
-            raise BadRequestException("Nenhum registro válido para importar.")
-
-        turmas = self.turmaRepository.saveTurmasFromCSV(turmas_formatadas)
-
-        if not turmas:
-            raise BadRequestException("Falha ao importar o registro.")
-        
-        return turmas
+        if isinstance(csv_data, list) and len(csv_data) > 1 and isinstance(csv_data[0], list):
+            headers = csv_data[0]
+            rows = csv_data[1:]
+        csv_data = [dict(zip(headers, row)) for row in rows]
+        return self.turmaCSVService.add_entities_from_csv(csv_data)
     
     def deleteTurma(self, id_turma: int):
         turma = self.turmaRepository.deleteTurma(id_turma)

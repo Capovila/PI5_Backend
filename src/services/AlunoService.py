@@ -4,11 +4,13 @@ from src.domain.Aluno import Aluno
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException
 from src.repository.AlunoRepository import AlunoRepository
+from src.services.templates.AlunoCSVService import AlunoCSVService
 
 class AlunoService:
     def __init__(self):
         self.alunoFactory: AlunoFactory = AlunoFromDictFactory()
         self.alunoRepository: AlunoRepository = AlunoRepository(self.alunoFactory)
+        self.alunoCSVService: AlunoCSVService = AlunoCSVService(self.alunoFactory, self.alunoRepository)
 
     def findAlunos(self) -> list[Aluno]:
         return self.alunoRepository.findAlunos()
@@ -40,24 +42,11 @@ class AlunoService:
         return aluno
 
     def addAlunoFromCSV(self, csv_data) -> list[Aluno]:
-        alunos_formatados:list[Aluno] = []
-        for linha in csv_data:
-            try:
-                aluno = self.alunoFactory.createAluno(linha)
-                alunos_formatados.append(aluno)
-            except (KeyError, ValueError) as e:
-                print(f"Erro ao processar linha: {linha}, erro: {e}")
-                continue
-
-        if not alunos_formatados:
-            raise BadRequestException("Nenhum registro válido para importar.")
-
-        alunos = self.alunoRepository.saveAlunosFromCSV(alunos_formatados)
-
-        if not alunos:
-            raise BadRequestException("Falha ao importar o registro.")
-
-        return alunos
+        if isinstance(csv_data, list) and len(csv_data) > 1 and isinstance(csv_data[0], list):
+            headers = csv_data[0]
+            rows = csv_data[1:]
+        csv_data = [dict(zip(headers, row)) for row in rows]
+        return self.alunoCSVService.add_entities_from_csv(csv_data)
 
     def deleteAluno(self, ra_aluno: int):
         aluno = self.alunoRepository.deleteAluno(ra_aluno)

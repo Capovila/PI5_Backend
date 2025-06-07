@@ -4,11 +4,13 @@ from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundExce
 from src.factories.Professor.ProfessorFactory import ProfessorFactory
 from src.factories.Professor.ProfessorFromDictFactory import ProfessorFromDictFactory
 from src.repository.ProfessorRepository import ProfessorRepository
+from src.services.templates.ProfessorCSVService import ProfessorCSVService
 
 class ProfessorService:
     def __init__(self):
         self.professorFactory: ProfessorFactory = ProfessorFromDictFactory()
         self.professorRepository: ProfessorRepository = ProfessorRepository(self.professorFactory)
+        self.professorCSVService: ProfessorCSVService = ProfessorCSVService(self.professorFactory, self.professorRepository)
 
     def findProfessores(self) -> list[Professor]:
         return self.professorRepository.findProfessores()
@@ -34,24 +36,11 @@ class ProfessorService:
         return professor
     
     def addProfessoresFromCSV(self, csv_data) -> list[Professor]:
-        professores_formatados: list[Professor] = []
-        for linha in csv_data:
-            try:
-                professor = self.professorFactory.createProfessor(linha)
-                professores_formatados.append(professor)
-            except (KeyError, ValueError) as e:
-                print(f"Erro ao processar linha: {linha}, erro: {e}")
-                continue
-
-        if not professores_formatados:
-            raise BadRequestException("Nenhum registro válido para importar.")
-
-        professores = self.professorRepository.saveProfessoresFromCSV(professores_formatados)
-
-        if not professores:
-            raise BadRequestException("Falha ao importar o registro.")
-        
-        return professores
+        if isinstance(csv_data, list) and len(csv_data) > 1 and isinstance(csv_data[0], list):
+            headers = csv_data[0]
+            rows = csv_data[1:]
+        csv_data = [dict(zip(headers, row)) for row in rows]
+        return self.professorCSVService.add_entities_from_csv(csv_data)
     
     def deleteProfessor(self, ra_professor: int):
         professor = self.professorRepository.deleteProfessor(ra_professor)

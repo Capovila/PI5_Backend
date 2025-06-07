@@ -4,11 +4,13 @@ from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundExce
 from src.factories.Disciplina.DisciplinaFactory import DisciplinaFactory
 from src.factories.Disciplina.DisciplinaFromDictFactory import DisciplinaFromDictFactory
 from src.repository.DisciplinaRepository import DisciplinaRepository
+from src.services.templates.DisciplinaCSVService import DisciplinaCSVService
 
 class DisciplinaService:
     def __init__(self):
         self.disciplinaFactory: DisciplinaFactory = DisciplinaFromDictFactory()
         self.disciplinaRepository: DisciplinaRepository = DisciplinaRepository(self.disciplinaFactory)
+        self.disciplinaCSVService: DisciplinaCSVService = DisciplinaCSVService(self.disciplinaFactory, self.disciplinaRepository)
 
     def findDisciplinas(self) -> list[Disciplina]:
         return self.disciplinaRepository.findDisciplinas()
@@ -54,24 +56,11 @@ class DisciplinaService:
         return disciplina
     
     def addDisciplinasFromCSV(self, csv_data) -> list[Disciplina]:
-        disciplinas_formatadas: list[Disciplina] = []
-        for linha in csv_data:
-            try:
-                disciplina = self.disciplinaFactory.createDisciplina(linha)
-                disciplinas_formatadas.append(disciplina)
-            except (KeyError, ValueError) as e:
-                print(f"Erro ao processar linha: {linha}, erro: {e}")
-                continue
-
-        if not disciplinas_formatadas:
-            raise BadRequestException("Nenhum registro válido para importar.")
-
-        disciplinas = self.disciplinaRepository.saveDisciplinasFromCSV(disciplinas_formatadas)
-
-        if not disciplinas:
-            raise BadRequestException("Falha ao importar o registro.")
-        
-        return disciplinas
+        if isinstance(csv_data, list) and len(csv_data) > 1 and isinstance(csv_data[0], list):
+            headers = csv_data[0]
+            rows = csv_data[1:]
+        csv_data = [dict(zip(headers, row)) for row in rows]
+        return self.disciplinaCSVService.add_entities_from_csv(csv_data)
     
     def deleteDisciplina(self, id_disciplina: int):
         desciplina = self.disciplinaRepository.deleteDisciplina(id_disciplina)

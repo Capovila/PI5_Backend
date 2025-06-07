@@ -1,15 +1,18 @@
+import csv
 from src.domain.TurmaDisciplina import TurmaDisciplina
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException
 from src.factories.TurmaDisciplina.TurmaDisciplinaFromDictFactory import TurmaDisciplinaFromDictFactory
 from src.factories.TurmaDisciplina.TurmaDisciplinaFactory import TurmaDisciplinaFactory
 from src.repository.TurmaDisciplinaRepository import TurmaDisciplinaRepository
+from src.services.templates.TurmaDisciplinaCSVService import TurmaDisciplinaCSVService
 
 
 class TurmaDisciplinaService:
     def __init__(self):
         self.turmaDisciplinaFactory: TurmaDisciplinaFactory = TurmaDisciplinaFromDictFactory()
         self.turmaDisciplinaRepository: TurmaDisciplinaRepository = TurmaDisciplinaRepository(self.turmaDisciplinaFactory)
+        self.turmaDisciplinaCSVService: TurmaDisciplinaCSVService = TurmaDisciplinaCSVService(self.turmaDisciplinaRepository)
 
     def findTurmaDisciplinas(self) -> list[TurmaDisciplina]:
         return self.turmaDisciplinaRepository.findTurmaDisciplinas()
@@ -45,33 +48,12 @@ class TurmaDisciplinaService:
         return turmaDisciplina
     
     def addTurmaDisciplinasFromCSV(self, csv_data) -> list[TurmaDisciplina]:
-        turmaDisciplinas_formatadas: list[TurmaDisciplina] = []
-        for linha in csv_data:
-            try:
-                is_concluida_str = linha.get("is_concluida", "false").strip().lower() # Default to "false" if missing
-                is_concluida_val = is_concluida_str == 'true'
-                print(f"Processando linha: {linha}, is_concluida: {is_concluida_val}")
-                turmaDisciplina = TurmaDisciplina(
-                    id_turma= int(linha["id_turma"]),
-                    id_disciplina= int(linha["id_disciplina"]),
-                    taxa_aprovacao= int(linha["taxa_aprovacao"]),
-                    is_concluida=is_concluida_val
-                )
-                turmaDisciplinas_formatadas.append(turmaDisciplina)
-            except (KeyError, ValueError) as e:
-                print(f"Erro ao processar linha: {linha}, erro: {e}")
-                continue
+        if isinstance(csv_data, list) and len(csv_data) > 1 and isinstance(csv_data[0], list):
+            headers = csv_data[0]
+            rows = csv_data[1:]
+        csv_data = [dict(zip(headers, row)) for row in rows]
+        return self.turmaDisciplinaCSVService.add_entities_from_csv(csv_data)
 
-        if not turmaDisciplinas_formatadas:
-            raise BadRequestException("Nenhum registro válido para importar.")
-        
-        turmaDisciplina = self.turmaDisciplinaRepository.saveTurmaDisciplinasFromCSV(turmaDisciplinas_formatadas)
-
-        if not turmaDisciplina:
-            raise BadRequestException("Falha ao importar o registro.")
-        
-        return turmaDisciplina
-    
     def deleteTurmaDisciplina(self, id_turma_disciplina: int):
         turmaDisciplina = self.turmaDisciplinaRepository.deleteTurmaDisciplina(id_turma_disciplina)
         if turmaDisciplina is None:

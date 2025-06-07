@@ -4,11 +4,13 @@ from src.domain.Nota import Nota
 from src.domain.exceptions.BadRequestException import BadRequestException
 from src.domain.exceptions.ResourceNotFoundException import ResourceNotFoundException
 from src.repository.NotaRepository import NotaRepository
+from src.services.templates.NotaCSVService import NotaCSVService
 
 class NotaService:
     def __init__(self):
         self.notaFactory: NotaFactory = NotaFromDictFactory()
         self.notaRepository: NotaRepository = NotaRepository(self.notaFactory)
+        self.notaCSVService: NotaCSVService = NotaCSVService(self.notaFactory, self.notaRepository)
 
     def findNotas(self) -> list[Nota]:
         return self.notaRepository.findNotas()
@@ -52,24 +54,11 @@ class NotaService:
         return nota
 
     def addNotasFromCSV(self, csv_data) -> list[Nota]:
-        notas_formatadas:list[Nota] = []
-        for linha in csv_data:
-            try:
-                nota = self.notaFactory.createNota(linha)
-                notas_formatadas.append(nota)
-            except (KeyError, ValueError) as e:
-                print(f"Erro ao processar linha: {linha}, erro: {e}")
-                continue
-
-        if not notas_formatadas:
-            raise BadRequestException("Nenhum registro válido para importar.")
-
-        notas = self.notaRepository.saveNotasFromCSV(notas_formatadas)
-
-        if not notas:
-            raise BadRequestException("Falha ao importar o registro.")
-
-        return notas
+        if isinstance(csv_data, list) and len(csv_data) > 1 and isinstance(csv_data[0], list):
+            headers = csv_data[0]
+            rows = csv_data[1:]
+        csv_data = [dict(zip(headers, row)) for row in rows]
+        return self.notaCSVService.add_entities_from_csv(csv_data)
 
     def deleteNota(self, id_notas: int):
         nota = self.notaRepository.deleteNota(id_notas)

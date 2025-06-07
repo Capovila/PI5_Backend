@@ -77,12 +77,13 @@ class NotaRepository:
     
     def saveNotasFromCSV(self, notas: list[Nota]) -> list[Nota]:
         notas_dict = [nota.to_dict() for nota in notas]
-
+        for nota in notas_dict:
+            nota.pop('id_notas', None)
+            
         response = supabase.table("notas").insert(notas_dict).execute()
-
-        if response.data:
+        if response and response.data:
             data = response.data
-            notas = [self.notaFactory.createNota(notas_dict) for notas_dict in data]
+            notas = [self.notaFactory.createNota(nota_dict) for nota_dict in data]
             return notas
         return []
     

@@ -60,6 +60,8 @@ class TurmaRepository:
     
     def saveTurmasFromCSV(self, turmas: list[Turma]) -> list[Turma]:
         turmas_dict = [turma.to_dict() for turma in turmas]
+        for turma in turmas_dict:
+            turma.pop('id_turma', None)
 
         response = supabase.table("turmas").insert(turmas_dict).execute()
 
